@@ -115,7 +115,7 @@ export const  nextTick = (function () {
             pending = true
             timerFunc()
         }
-        
+
     }
 
 })
