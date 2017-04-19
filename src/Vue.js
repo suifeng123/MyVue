@@ -63,6 +63,14 @@
     function isPrimitive (value) {
         return typeof  value === 'string' || typeof value === 'number'
     }
-    //创建一个
+    //创建一个 缓存版的纯粹的函数
+    function cached(fn) {
+        var cache = Object.create(null);
+        return (function cachedFn(str) {
+            var hit = cache[str];
+            return hit || (cache[str] = fn(str))
+
+        })
+    }
 
 })
