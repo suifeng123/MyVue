@@ -59,6 +59,10 @@
     function hasOwn(obj,key) {
         return hasOwnProperty.call(obj,key)
     }
-
+    //检测一个值是否是原始值
+    function isPrimitive (value) {
+        return typeof  value === 'string' || typeof value === 'number'
+    }
+    //创建一个
 
 })
