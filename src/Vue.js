@@ -73,4 +73,20 @@
         })
     }
 
+    var camelizeRE = /-(\w)/g;
+    var camelize = cached(function (str) {
+        return str.replace(hyphenateRE,'$1-$2')
+            .replace(hyphenateRE,'$1-$2')
+            .toLowerCase()
+    });
+   //简易版的绑定，比原生的绑定要快
+    function bind(fn,ctx) {
+        function boundFn(a) {
+            var l = arguments.length;
+            return l?l>1?fn.apply(ctx,arguments):fn.call(ctx,a):fn.call(ctx)
+
+        }
+        boundFn._length = fn.length;
+        return boundFn
+    }
 })
