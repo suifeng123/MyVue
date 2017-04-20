@@ -497,9 +497,51 @@
       Dep.target = targetStack.pop();
   }
 
+  var arrayProto = Array.prototype;
 
+  var arrayMethods = Object.create(arrayProto);
+  ['push','pop','shift','unshift','splice','sort','reverse']
+      .forEach(function (method) {
+          //缓存一个原始的方法
+          var oiginal = arrayProto[method];
+          def(arrayMethods,method,function mutator() {
+              var arguments$1 = arguments;
+              var i = arguments.length;
+              var args = new Array(i);
+              while(i--) args[i] = arguments$1[i];
+              var result = oiginal.apply(this,args);
+              var ob = this.__ob__;
+              var inserted;
+              switch (method){
+                  case 'push':
+                      inserted = args;
+                      break
+                  case 'unshift':
+                      inserted = args;
+                      break
+                  case 'splice':
+                      inserted = args.slice(2);
+                      break
+              }
+              if(inserted){ ob.observeArray(inserted);}
+              //通知变化
+              ob.dep.notify();
+              return result
+          });
+      });
 
+  var arrayKeys = Object.getOwnPropertyNames(arrayMethods);
 
+ var observerState = {
+     shouldConvert: true,
+     isSettingProps: false
+ };
+
+ var Observer = function Observer(value) {
+     this.value = value;
+     this.dep = new Dep();
+     this.vmCount = 0;
+ }
 
 
 
