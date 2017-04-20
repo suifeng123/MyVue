@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="43661585-2094-44e0-84a6-ad8f7d3bb2de" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Vue.js" afterPath="$PROJECT_DIR$/src/Vue.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -27,11 +26,9 @@
       <file leaf-file-name="Vue.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Vue.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="534">
-              <caret line="455" column="4" lean-forward="false" selection-start-line="455" selection-start-column="4" selection-end-line="455" selection-end-column="4" />
-              <folding>
-                <element signature="e#0#49#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="437">
+              <caret line="487" column="4" lean-forward="false" selection-start-line="487" selection-start-column="4" selection-end-line="487" selection-end-column="4" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -172,12 +169,12 @@
       <updated>1492499311209</updated>
       <workItem from="1492499313346" duration="11285000" />
       <workItem from="1492583838947" duration="10297000" />
-      <workItem from="1492672011027" duration="1414000" />
+      <workItem from="1492672011027" duration="2309000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="22996000" />
+    <option name="totallyTimeSpent" value="23891000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -216,9 +213,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#49#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -226,9 +221,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#49#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -248,11 +241,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Vue.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="534">
-          <caret line="455" column="4" lean-forward="false" selection-start-line="455" selection-start-column="4" selection-end-line="455" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#49#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="437">
+          <caret line="487" column="4" lean-forward="false" selection-start-line="487" selection-start-column="4" selection-end-line="487" selection-end-column="4" />
+          <folding />
         </state>
       </provider>
     </entry>
