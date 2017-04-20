@@ -541,7 +541,81 @@
      this.value = value;
      this.dep = new Dep();
      this.vmCount = 0;
+     def(value,'__obj__',this);
+     if(Array.isArray(value)){
+         var augment = hasProto?protoAugment:copyAugment;
+         augment(value,arrayMethods,arrayKeys);
+     }else{
+         this.walk(value);
+     }
  }
+
+ Observer.prototype.walk = function walk(obj) {
+    var keys = Object.keys(obj);
+    for(var i=0;i<keys.length;i++){
+        defineReactive$$1(obj,keys[i],obj[keys[i]]);
+    }
+ };
+
+       //监控一个数组的选项
+    Observer.prototype.observeArray = function observeArray(items) {
+         for(var i=0,l = items.length;i<l;i++){
+             observer(items[i]);
+         }
+
+    };
+
+    function protoAugment(target,src) {
+        target.__proto__ = src;
+
+    }
+
+   function copyAugment(target,src,keys) {
+       for(var i=0,l=keys.length;i<l;i++){
+           var key = keys[i];
+           def(target,key,src[key]);
+       }
+   }
+
+    /**
+     * 创造一个值得监控器实例
+     * 如果成功监控的话，返回一个新的监控值
+     * 或者返回一个存在的监控器如果这个值已经存在了
+     */
+
+    function observe(value,asRootData) {
+        if(isObject(value)) return;
+        var ob;
+        if(hasOwn(value,'__ob__')&& value.__ob__ instanceof Observer){
+            ob = value.__ob__;
+        }else if(
+            observerState.shouldConvert &&
+                !isServerRendering() &&
+            (Array.isArray(value)|| isPlainObject(value))&&
+                Object.isExtensible(value)&& !value._isVue
+        ){
+            ob = new Object(value);
+
+        }
+
+        if(asRootData && ob){
+                ob.vmCount++;
+        }
+        return ob;
+
+    }
+
+    function defineReactive$$1(
+        ob,
+        key,
+        val,
+        customSetter
+    ) {
+        var dep = new Dep();
+      var property = Object.getOwnPropertyDescriptor(obj,key);
+
+    }
+
 
 
 

@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="43661585-2094-44e0-84a6-ad8f7d3bb2de" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Vue.js" afterPath="$PROJECT_DIR$/src/Vue.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -28,7 +27,7 @@
         <entry file="file://$PROJECT_DIR$/src/Vue.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="506">
-              <caret line="542" column="22" lean-forward="false" selection-start-line="542" selection-start-column="22" selection-end-line="542" selection-end-column="22" />
+              <caret line="614" column="62" lean-forward="false" selection-start-line="614" selection-start-column="62" selection-end-line="614" selection-end-column="62" />
               <folding />
             </state>
           </provider>
@@ -170,15 +169,15 @@
       <updated>1492499311209</updated>
       <workItem from="1492499313346" duration="11285000" />
       <workItem from="1492583838947" duration="10297000" />
-      <workItem from="1492672011027" duration="4222000" />
+      <workItem from="1492672011027" duration="7775000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25804000" />
+    <option name="totallyTimeSpent" value="29357000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23979212" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -243,7 +242,7 @@
     <entry file="file://$PROJECT_DIR$/src/Vue.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="506">
-          <caret line="542" column="22" lean-forward="false" selection-start-line="542" selection-start-column="22" selection-end-line="542" selection-end-column="22" />
+          <caret line="614" column="62" lean-forward="false" selection-start-line="614" selection-start-column="62" selection-end-line="614" selection-end-column="62" />
           <folding />
         </state>
       </provider>
