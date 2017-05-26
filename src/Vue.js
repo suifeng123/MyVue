@@ -654,5 +654,21 @@
         Object.defineProperties(target,key,sharedPropertyDefinition);
     }
 
+    function createComputedGetter(key) {
+        return function computedGetter() {
+            var watcher = this._computedWatchers && this._computedWatchers[key];
+            if(watcher) {
+                if(watcher.dirty){
+                    watcher.evalute();
+                }
+                if(Dep.target) {
+                    watcher.depend();
+                }
+                return watcher.value;
+            }
+        }
+
+    }
+
 
 })
