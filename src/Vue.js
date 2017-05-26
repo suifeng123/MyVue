@@ -616,7 +616,43 @@
 
     }
 
-//计算属性的源码
+   //计算属性的源码
+    function initComputed (vm,computed) {
+         var watchers = vm._computedWatchers = Object.create(null);
+
+         for(var key in computed){
+             //获取所有的需要计算的属性
+             var userDef = computed[key];
+             var getter = typeof userDef === 'function'? userDef:userDef.get;
+
+             {
+                 if(getter === undefined){
+                     warn(
+                         ("No getter function has been defined for computed property \"" + key + "\"."),
+                         vm
+                     );
+                     getter = noop;
+                 }
+             }
+             //创建内部非监视器用于计算属性
+             watchers[key] = new Watch(vm,getter,noop,computedWatcherOptions);
+             //组件定义的计算属性已经在组件属性上的被定义了  我们只需要
+             if(!(key in vm)){
+                 defineComputed(vm,key,userDef);
+             }
+         }
+    }
+
+    function definedComputed (target,key,userDef){
+        if(typeof userDef === 'function') {
+            sharedPropertyDefinition.get = createComputedGetter(key);
+            sharedPropertyDefinition.set = noop;
+        }else {
+            sharedPropertyDefinition.get = userDef.get?userDef.cache !== false ?createComputedGetter(key):userDef.get:noop;
+            sharedPropertyDefinition.set = userDef.set?userDef.set:noop;
+        }
+        Object.defineProperties(target,key,sharedPropertyDefinition);
+    }
 
 
 })

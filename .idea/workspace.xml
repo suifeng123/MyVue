@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="43661585-2094-44e0-84a6-ad8f7d3bb2de" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Vue.js" afterPath="$PROJECT_DIR$/src/Vue.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -24,11 +23,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Vue.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Vue.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Vue.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="421">
-              <caret line="618" column="9" lean-forward="false" selection-start-line="618" selection-start-column="9" selection-end-line="618" selection-end-column="9" />
+            <state relative-caret-position="467">
+              <caret line="653" column="69" lean-forward="false" selection-start-line="653" selection-start-column="69" selection-end-line="653" selection-end-column="69" />
               <folding />
             </state>
           </provider>
@@ -54,11 +53,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="echarts.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="echarts.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/echarts.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="960" column="81" lean-forward="false" selection-start-line="960" selection-start-column="81" selection-end-line="960" selection-end-column="81" />
+            <state relative-caret-position="276">
+              <caret line="964" column="26" lean-forward="false" selection-start-line="964" selection-start-column="26" selection-end-line="964" selection-end-column="26" />
               <folding>
                 <marker date="1495785476631" expanded="true" signature="142695:142866" ph="..." />
                 <marker date="1495785476631" expanded="true" signature="2339578:2339587" ph="..." />
@@ -103,6 +102,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>cache</find>
+      <find>defineds</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -114,8 +114,8 @@
         <option value="$PROJECT_DIR$/src/util/env.js" />
         <option value="$USER_HOME$/Desktop/vue.js" />
         <option value="$PROJECT_DIR$/testVue.html" />
-        <option value="$PROJECT_DIR$/src/Vue.js" />
         <option value="$PROJECT_DIR$/testEcharts.html" />
+        <option value="$PROJECT_DIR$/src/Vue.js" />
       </list>
     </option>
   </component>
@@ -126,8 +126,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-27" />
-    <option name="y" value="59" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
     <option name="width" value="1382" />
     <option name="height" value="744" />
   </component>
@@ -268,18 +268,18 @@
       <workItem from="1492583838947" duration="10297000" />
       <workItem from="1492672011027" duration="7775000" />
       <workItem from="1494240041730" duration="904000" />
-      <workItem from="1495781379001" duration="2787000" />
+      <workItem from="1495781379001" duration="5057000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="33048000" />
+    <option name="totallyTimeSpent" value="35318000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-27" y="59" width="1382" height="744" extended-state="0" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23958333" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23958333" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -372,14 +372,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Vue.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="421">
-          <caret line="618" column="9" lean-forward="false" selection-start-line="618" selection-start-column="9" selection-end-line="618" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/echarts.min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -398,13 +390,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/echarts.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="960" column="81" lean-forward="false" selection-start-line="960" selection-start-column="81" selection-end-line="960" selection-end-column="81" />
+        <state relative-caret-position="276">
+          <caret line="964" column="26" lean-forward="false" selection-start-line="964" selection-start-column="26" selection-end-line="964" selection-end-column="26" />
           <folding>
             <marker date="1495785476631" expanded="true" signature="142695:142866" ph="..." />
             <marker date="1495785476631" expanded="true" signature="2339578:2339587" ph="..." />
             <marker date="1495785476631" expanded="true" signature="2339641:2339656" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Vue.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="467">
+          <caret line="653" column="69" lean-forward="false" selection-start-line="653" selection-start-column="69" selection-end-line="653" selection-end-column="69" />
+          <folding />
         </state>
       </provider>
     </entry>
