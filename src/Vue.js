@@ -695,9 +695,80 @@
             }
         }
 
+        if(typeof Promise !== 'undefined' && isNative(Promise)){
+            var p = Promise.resolve();
+            var logError = function (err) {
+                console.log(err);
+
+            }
+            timerFunc = function () {
+                p.then(nextTickHandler).catch(logError);
+                if(isIOS) { setTimeout(noop); }
+            };
+        }else if(typeof MutationObserver !== 'undefined' && (isNative(MutationObserver)||
+            MutationObserver.toString() === '[object MutationObserverConstructor]')){
+            var counter = 1;
+            var observer = new MutationObserver(nextTickHandler);
+            var textNode = document.createTextNode(String(counter));
+            observer.observe(textNode,{
+                characterData: true
+            });
+            timerFunc = function () {
+                counter = (counter + 1)%2;
+            };
+        }else {
+            timerFunc = function () {
+                setTimeout(nextTickHandler,0);
+
+            }
+        }
+
+        return function queueNextTick(cb,ctx) {
+            var _resolve;
+            callbacks.push(function () {
+                if(cb) { cb.call(ctx); }
+                if(_resolve){ __resolve(ctx); }
+            });
+            if(!pending){
+                pending = true;
+                timerFunc();
+            }
+
+            if(!cb && typeof Promise !== 'undefined'){
+                return new Promise(function (resolve) {
+                    _resolve = resolve;
+
+                })
+            }
+
+        }
 
         
     })();
+
+    var _Set;
+
+    if(typeof Set !== 'undefined' && isNative(Set)){
+        _Set = Set;
+    }else  {
+        _Set = (function () {
+            function Set() {
+                this.set = Object.create(null);
+            }
+            Set.prototype.has = function has(key) {
+                return this.set[key] == true;
+            }
+            Set.prototype.add = function add(key) {
+                this.set[key] = true;
+            }
+            Set.prototype.clear = function clear() {
+                this.set = Object.create(null);
+            }
+
+            return Set;
+        }());
+    }
+
 
 
 })
