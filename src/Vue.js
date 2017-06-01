@@ -769,6 +769,110 @@
         }());
     }
 
+    var warn = noop;
+    var tip = noop;
+    var formatComponentName;
+
+    {
+       var hasConsole = typeof console !== 'undefined';
+       var classifyRE = /(?:^|[-_])(\w)/g;
+       var classify = function(str) {
+           return str.replace(classifyRE,function (c) {
+               return c.toUpperCase();
+
+           }).replace(/[-_]/g,'');
+       };
+        warn = function(msg,vm) {
+            if(hasConsole && (!config.silent)){
+                console.error("[Vue warn]:" + msg + " "+(
+                    vm?formatLocation(formatComponentName(vm)):''
+                    ) );
+            }
+        };
+
+        tip = function (msg,vm) {
+            if(hasConsole && (!config.slient)) {
+                console.warn("[Vue tip:]"+msg+" "+(
+                    vm?formatLocation(formatComponentName(vm)):" "
+                    ));
+            }
+
+        };
+
+        formatComponentName = function(vm,includeFile) {
+            if(vm.$root === vm){
+                return '<Root>'
+            }
+            var name = typeof vm === 'string'
+            ?vm : typeof vm === 'function' && vm.options
+            ? vm.options.name : vm._isVue ? vm.$options.name || vm.$options._componentTag:vm.name;
+            var file = vm._isVue && vm.$options.__file;
+            if (!name && file) {
+                var match = file.match(/([^/\\]+)\.vue$/);
+                name = match && match[1];
+            }
+
+            return (
+                (name ? ("<" + (classify(name)) + ">") : "<Anonymous>") +
+                (file && includeFile !== false ? (" at " + file) : '')
+            )
+        };
+
+        var formatLocation = function (str) {
+            if (str === "<Anonymous>") {
+                str += " - use the \"name\" option for better debugging messages.";
+            }
+            return ("\n(found in " + str + ")")
+        };
+
+
+
+    }
+
+    var arrayProto = Array.prototype;
+    var arrayMethods = Object.create(arrayProto);[
+        'push',
+        'pop',
+        'shift',
+        'unshift',
+        'splice',
+        'sort',
+        'reverse'
+    ]
+        .forEach(function (method) {
+            // cache original method
+            var original = arrayProto[method];
+            def(arrayMethods, method, function mutator () {
+                var arguments$1 = arguments;
+
+                // avoid leaking arguments:
+                // http://jsperf.com/closure-with-arguments
+                var i = arguments.length;
+                var args = new Array(i);
+                while (i--) {
+                    args[i] = arguments$1[i];
+                }
+                var result = original.apply(this, args);
+                var ob = this.__ob__;
+                var inserted;
+                switch (method) {
+                    case 'push':
+                        inserted = args;
+                        break
+                    case 'unshift':
+                        inserted = args;
+                        break
+                    case 'splice':
+                        inserted = args.slice(2);
+                        break
+                }
+                if (inserted) { ob.observeArray(inserted); }
+                // notify change
+                ob.dep.notify();
+                return result
+            });
+        });
+
 
 
 })
