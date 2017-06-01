@@ -670,5 +670,34 @@
 
     }
 
+    //检测devtools工具
+    var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
+
+    function isNative(Ctor){
+            return /native code/.test(Ctor.toString())
+    }
+
+    var hasSymbol = typeof Symbol !== 'undefined' && isNative(Symbol) &&
+                    typeof Reflect !== 'undefined' && isNative(Reflect.ownKeys);
+
+    //延迟一个异步任务
+    var nextTick = (function () {
+        var callbacks = [];
+        var pending = false;
+        var timerFunc;
+        
+        function nextTickHandler() {
+            pending = false;
+            var copies = callbacks.slice(0);//数组的深度复制
+            callbacks.length = 0;
+            for(var i = 0; i < copies.length; i++){
+                copies[i]();
+            }
+        }
+
+
+        
+    })();
+
 
 })
