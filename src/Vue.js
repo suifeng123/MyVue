@@ -872,6 +872,14 @@
                 return result
             });
         });
+    /*   */
+    var arrayKeys = Object.getOwnPropertyNames(arrayKeys);
+
+    var observerState = {
+        shouldConvert: true,
+        isSettingProps: false
+    };
+
 
 
 
