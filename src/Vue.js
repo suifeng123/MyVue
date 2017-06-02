@@ -879,8 +879,62 @@
         shouldConvert: true,
         isSettingProps: false
     };
+ var Observer = function Observer(value) {
+     this.value = value;
+     this.dep = new Dep();
+     this.vmCount = 0;
+     def(value,'__obj__',this);
+     if(Array.isArray(value)) {
+         var augment = hasProto ? protoAugment:copyAugment;
+         augment(value,arrayMethods,arrayKeys);
+         this.observeArray(value);
+     }else {
+         this.walk(value);
+     }
+ }
 
+Observer.prototype.walk = function walk(obj) {
+    var keys = Object.keys(obj);
+    for(var i=0;i<keys.length;i++){
+        defineReactive$$1(obj,keys[i],obj[keys[i]]);
+    }
+}
 
+Observer.prototype.observeArray = function observeArray(items) {
+     for(var i=0,l=items.length;i<l;i++){
+         observe(items[i]);
+     }
+};
+
+ function protoAugment (target,src) {
+     target.__proto__ = src;
+
+ }
+
+ function copyAugment(target,src,keys) {
+     for(var i=0,l=keys.length;i<l;i++){
+         var key = keys[i];
+         def(target,key,src[key]);
+     }
+
+ }
+  function observe(value,asRootData) {
+     if(!isObject(value)){
+         return
+     }
+     var ob;
+     if(hasOwn(value,'__ob__') && value.__ob__ instanceof Observer){
+         ob = value.__ob__;
+     }else if(observerState.shouldConvert && !isServerRendering() && (Array.isArray(value)|| isPlainObject(value))
+     &&Object.isExtensible(value) && !value._isVue){
+         ob = new Observer(value);
+     }
+
+     if(asRootData && ob){
+         ob.vmCount++;
+     }
+     return ob
+  }
 
 
 })
