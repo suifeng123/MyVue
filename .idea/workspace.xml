@@ -28,7 +28,7 @@
         <entry file="file://$PROJECT_DIR$/src/Vue.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="536">
-              <caret line="1186" column="4" lean-forward="false" selection-start-line="1186" selection-start-column="4" selection-end-line="1186" selection-end-column="4" />
+              <caret line="1241" column="5" lean-forward="false" selection-start-line="1241" selection-start-column="5" selection-end-line="1241" selection-end-column="5" />
               <folding>
                 <element signature="e#21828#23605#0" expanded="false" />
               </folding>
@@ -129,8 +129,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
+    <option name="x" value="301" />
+    <option name="y" value="50" />
     <option name="width" value="1382" />
     <option name="height" value="744" />
   </component>
@@ -244,15 +244,15 @@
       <workItem from="1496304723863" duration="8588000" />
       <workItem from="1496390632840" duration="4669000" />
       <workItem from="1496565028343" duration="1270000" />
-      <workItem from="1496644349937" duration="2128000" />
+      <workItem from="1496644349937" duration="3113000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54047000" />
+    <option name="totallyTimeSpent" value="55032000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="301" y="50" width="1382" height="744" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23958333" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -611,7 +611,7 @@
     <entry file="file://$PROJECT_DIR$/src/Vue.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="536">
-          <caret line="1186" column="4" lean-forward="false" selection-start-line="1186" selection-start-column="4" selection-end-line="1186" selection-end-column="4" />
+          <caret line="1241" column="5" lean-forward="false" selection-start-line="1241" selection-start-column="5" selection-end-line="1241" selection-end-column="5" />
           <folding>
             <element signature="e#21828#23605#0" expanded="false" />
           </folding>

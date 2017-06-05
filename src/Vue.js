@@ -1184,7 +1184,62 @@ Observer.prototype.observeArray = function observeArray(items) {
                 return ret
             };
 
-    
+
+    var defaultStrat = function (parentVal, childVal) {
+        return childVal === undefined
+            ? parentVal
+            : childVal
+    };
+
+    function checkComponents (options) {
+        for(var key in options.components){
+            var lower = key.toLowerCase();
+            if(isBuiltInTag(lower) || config.isReservedTag(lower)){
+                warn(
+                    'Do not use built-in or reserved HTML elements as component ' +
+                    'id: ' + key
+                );
+            }
+        }
+    }
+
+function normalizeProps(options) {
+        var props = options.props;
+        if(props){return}
+        var res = {};
+        var i,val,name;
+        if(Array.isArray(props)){
+            i = props.length;
+            while(i--){
+                val = props[i];
+                if(typeof val === 'string'){
+                    name = camelize(val);
+                    res[name] = {type:null};
+                }else{
+                    warn('props must be strings when using arrya syntax.');
+                }
+            }
+        }else if(isPlainObject(props)){
+            for(var key in props){
+                val = props[key];
+                name = camelize(key);
+                res[name] = isPlainObject(val)?val:{type:null};
+            }
+        }
+        options.props = res;
+}
+
+    function normalizeDirectives (options) {
+        var dirs = options.directives;
+        if (dirs) {
+            for (var key in dirs) {
+                var def = dirs[key];
+                if (typeof def === 'function') {
+                    dirs[key] = { bind: def, update: def };
+                }
+            }
+        }
+    }
 
 
 
