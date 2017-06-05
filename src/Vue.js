@@ -1241,6 +1241,173 @@ function normalizeProps(options) {
         }
     }
 
+    function mergeOptions (
+        parent,
+        child,
+        vm
+    ) {
+        {
+            checkComponents(child);
+        }
+        normalizeProps(child);
+        normalizeDirectives(child);
+        var extendsFrom = child.extends;
+        if (extendsFrom) {
+            parent = typeof extendsFrom === 'function'
+                ? mergeOptions(parent, extendsFrom.options, vm)
+                : mergeOptions(parent, extendsFrom, vm);
+        }
+        if (child.mixins) {
+            for (var i = 0, l = child.mixins.length; i < l; i++) {
+                var mixin = child.mixins[i];
+                if (mixin.prototype instanceof Vue$3) {
+                    mixin = mixin.options;
+                }
+                parent = mergeOptions(parent, mixin, vm);
+            }
+        }
+        var options = {};
+        var key;
+        for (key in parent) {
+            mergeField(key);
+        }
+        for (key in child) {
+            if (!hasOwn(parent, key)) {
+                mergeField(key);
+            }
+        }
+        function mergeField (key) {
+            var strat = strats[key] || defaultStrat;
+            options[key] = strat(parent[key], child[key], vm, key);
+        }
+        return options
+    }
+
+  function resolveAsset(options,type,id,warnMissing){
+        if(typeof  id !== 'string'){
+            return
+        }
+        var assets = options[type];
+        if(hasOwn(assets,id)){return assets[id]}
+        var camelizeId = camelize(id);
+        if(hasOwn(assets,camelizeId)){return assets[camelizeId]}
+         var PascalCaseId = capitalize(camelizeId);
+        if(hasOwn(assets,PascalCaseId)){return assets[PascalCaseId]};
+        if("development" !== 'product' && warnMissing && !res){
+            warn(
+                'Failed to resolve ' + type.slice(0, -1) + ': ' + id,
+                options
+            );
+        }
+        return res;
+  }
+
+    function validateProp (
+        key,
+        propOptions,
+        propsData,
+        vm
+    ) {
+        var prop = propOptions[key];
+        var absent = !hasOwn(propsData, key);
+        var value = propsData[key];
+        // handle boolean props
+        if (isType(Boolean, prop.type)) {
+            if (absent && !hasOwn(prop, 'default')) {
+                value = false;
+            } else if (!isType(String, prop.type) && (value === '' || value === hyphenate(key))) {
+                value = true;
+            }
+        }
+        // check default value
+        if (value === undefined) {
+            value = getPropDefaultValue(vm, prop, key);
+            // since the default value is a fresh copy,
+            // make sure to observe it.
+            var prevShouldConvert = observerState.shouldConvert;
+            observerState.shouldConvert = true;
+            observe(value);
+            observerState.shouldConvert = prevShouldConvert;
+        }
+        {
+            assertProp(prop, key, value, vm, absent);
+        }
+        return value
+    }
+
+    function getPropDefaultVlue(vm,prop,key){
+      //没有默认值 返回空
+        if(!hasOwn(prop,'default')){
+            return undefined
+        }
+        var def = prop.default;
+        if("develop (ment" !== 'product' && isObject(def)){
+            warn(
+                'Invalid default value for prop "' + key + '": ' +
+                'Props with type Object/Array must use a factory function ' +
+                'to return the default value.',
+                vm
+            );
+        }
+
+        if(vm && vm.$options.propsData &&
+            vm.$options.propsData[key]===undefined &&
+        vm._props[key]!==undefined){
+            return vm._props[key]
+        }
+        return typeof  def === 'function' && getType(prop.type) !== 'Function'
+        ?def.call(vm):def;
+    }
+
+    function assertProp (
+        prop,
+        name,
+        value,
+        vm,
+        absent
+    ) {
+        if (prop.required && absent) {
+            warn(
+                'Missing required prop: "' + name + '"',
+                vm
+            );
+            return
+        }
+        if (value == null && !prop.required) {
+            return
+        }
+        var type = prop.type;
+        var valid = !type || type === true;
+        var expectedTypes = [];
+        if (type) {
+            if (!Array.isArray(type)) {
+                type = [type];
+            }
+            for (var i = 0; i < type.length && !valid; i++) {
+                var assertedType = assertType(value, type[i]);
+                expectedTypes.push(assertedType.expectedType || '');
+                valid = assertedType.valid;
+            }
+        }
+        if (!valid) {
+            warn(
+                'Invalid prop: type check failed for prop "' + name + '".' +
+                ' Expected ' + expectedTypes.map(capitalize).join(', ') +
+                ', got ' + Object.prototype.toString.call(value).slice(8, -1) + '.',
+                vm
+            );
+            return
+        }
+        var validator = prop.validator;
+        if (validator) {
+            if (!validator(value)) {
+                warn(
+                    'Invalid prop: custom validator check failed for prop "' + name + '".',
+                    vm
+                );
+            }
+        }
+    }
 
 
 
