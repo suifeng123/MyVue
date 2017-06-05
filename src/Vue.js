@@ -984,7 +984,66 @@ Observer.prototype.observeArray = function observeArray(items) {
          }
      });
   }
-  //写到源码882行
+    function set (target, key, val) {
+        if (Array.isArray(target) && typeof key === 'number') {
+            target.length = Math.max(target.length, key);
+            target.splice(key, 1, val);
+            return val
+        }
+        if (hasOwn(target, key)) {
+            target[key] = val;
+            return val
+        }
+        var ob = (target ).__ob__;
+        if (target._isVue || (ob && ob.vmCount)) {
+            "development" !== 'production' && warn(
+                'Avoid adding reactive properties to a Vue instance or its root $data ' +
+                'at runtime - declare it upfront in the data option.'
+            );
+            return val
+        }
+        if (!ob) {
+            target[key] = val;
+            return val
+        }
+        defineReactive$$1(ob.value, key, val);
+        ob.dep.notify();
+        return val
+    }
+
+    function del (target, key) {
+        if (Array.isArray(target) && typeof key === 'number') {
+            target.splice(key, 1);
+            return
+        }
+        var ob = (target ).__ob__;
+        if (target._isVue || (ob && ob.vmCount)) {
+            "development" !== 'production' && warn(
+                'Avoid deleting properties on a Vue instance or its root $data ' +
+                '- just set it to null.'
+            );
+            return
+        }
+        if (!hasOwn(target, key)) {
+            return
+        }
+        delete target[key];
+        if (!ob) {
+            return
+        }
+        ob.dep.notify();
+    }
+
+    function dependArray (value) {
+        for (var e = (void 0), i = 0, l = value.length; i < l; i++) {
+            e = value[i];
+            e && e.__ob__ && e.__ob__.dep.depend();
+            if (Array.isArray(e)) {
+                dependArray(e);
+            }
+        }
+    }
+    
 
 
 
