@@ -1043,7 +1043,152 @@ Observer.prototype.observeArray = function observeArray(items) {
             }
         }
     }
+
+    var strats = config.optionMergeStrategies;
+
+    {
+        strats.el = strats.propsData = function (parent,child,vm,key) {
+            if(!vm) {
+                warn(
+                    "option \"" + key + "\" can only be used during instance " +
+                    'creation with the `new` keyword.'
+                );
+            }
+            return defaultStrat(parent,child);
+        };
+    }
+
+    function mergeData(to,from){
+        if(!from) {return to}
+        var key,toVal,fromVal;
+        var keys = Object.keys(from);
+        for(var i=0;i<keys.length;i++){
+            key = keys[i];
+            toVal = to[key];
+            fromVal = from[key];
+            if(!hasOwn(to,key)){
+                set(to,key,fromVal);
+            }else if(isPlainObject(toVal) && isPlainObject(fromVal)){
+                mergeData(toVal,fromVal);
+            }
+        }
+        return to
+    }
+
+    strats.data = function (
+        parentVal,
+        childVal,
+        vm
+    ) {
+        if (!vm) {
+            // in a Vue.extend merge, both should be functions
+            if (!childVal) {
+                return parentVal
+            }
+            if (typeof childVal !== 'function') {
+                "development" !== 'production' && warn(
+                    'The "data" option should be a function ' +
+                    'that returns a per-instance value in component ' +
+                    'definitions.',
+                    vm
+                );
+                return parentVal
+            }
+            if (!parentVal) {
+                return childVal
+            }
+            // when parentVal & childVal are both present,
+            // we need to return a function that returns the
+            // merged result of both functions... no need to
+            // check if parentVal is a function here because
+            // it has to be a function to pass previous merges.
+            return function mergedDataFn () {
+                return mergeData(
+                    childVal.call(this),
+                    parentVal.call(this)
+                )
+            }
+        } else if (parentVal || childVal) {
+            return function mergedInstanceDataFn () {
+                // instance merge
+                var instanceData = typeof childVal === 'function'
+                    ? childVal.call(vm)
+                    : childVal;
+                var defaultData = typeof parentVal === 'function'
+                    ? parentVal.call(vm)
+                    : undefined;
+                if (instanceData) {
+                    return mergeData(instanceData, defaultData)
+                } else {
+                    return defaultData
+                }
+            }
+        }
+    };
+
+    function mergeHook (
+        parentVal,
+        childVal
+    ) {
+        return childVal
+            ? parentVal
+                ? parentVal.concat(childVal)
+                : Array.isArray(childVal)
+                    ? childVal
+                    : [childVal]
+            : parentVal
+    }
+
+    config._lifecycleHooks.forEach(function (hook) {
+        strats[hook] = mergeHook;
+    });
+
+    function mergeAssets(parentVal,childVal){
+        var res = Object.create(parentVal || null);
+        return childVal?extend(res,childVal):res;
+    }
+
+    config._assetTypes.forEach(function(type){
+        strats[type+'s'] = mergeAssets;
+    });
+
+    strats.watch = function (parentVal,childVal) {
+        if(!childVal){ return Object.create(parentVal || null)}
+        if(!parentVal) {
+            return childVal
+        }
+        var ret = {};
+        extend(ret,parentVal);
+        for(var key in childVal) {
+            var perent = ret[key];
+            var child = childVal[key];
+            if(parent && Array.isArray(parent)){
+                parent = [parent];
+            }
+
+            ret[key] = parent ? parent.concat(child):[child];
+        }
+
+        return ret;
+
+    }
+
+    strats.props =
+        strats.methods =
+            strats.computed = function (parentVal, childVal) {
+                if (!childVal) { return Object.create(parentVal || null) }
+                if (!parentVal) { return childVal }
+                var ret = Object.create(null);
+                extend(ret, parentVal);
+                extend(ret, childVal);
+                return ret
+            };
+
     
+
+
+
+
 
 
 
