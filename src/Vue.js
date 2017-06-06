@@ -1537,6 +1537,405 @@ function normalizeProps(options) {
         };
     }
 
+    var mark;
+    var measure;
+
+    {
+        var perf = inBrowser && window.performance;
+        /* istanbul ignore if */
+        if (
+            perf &&
+            perf.mark &&
+            perf.measure &&
+            perf.clearMarks &&
+            perf.clearMeasures
+        ) {
+            mark = function (tag) { return perf.mark(tag); };
+            measure = function (name, startTag, endTag) {
+                perf.measure(name, startTag, endTag);
+                perf.clearMarks(startTag);
+                perf.clearMarks(endTag);
+                perf.clearMeasures(name);
+            };
+        }
+    }
+    var VNode = function VNode (
+        tag,
+        data,
+        children,
+        text,
+        elm,
+        context,
+        componentOptions
+    ) {
+        this.tag = tag;
+        this.data = data;
+        this.children = children;
+        this.text = text;
+        this.elm = elm;
+        this.ns = undefined;
+        this.context = context;
+        this.functionalContext = undefined;
+        this.key = data && data.key;
+        this.componentOptions = componentOptions;
+        this.componentInstance = undefined;
+        this.parent = undefined;
+        this.raw = false;
+        this.isStatic = false;
+        this.isRootInsert = true;
+        this.isComment = false;
+        this.isCloned = false;
+        this.isOnce = false;
+    };
+
+    var prototypeAccessors = { child: {} };
+
+// DEPRECATED: alias for componentInstance for backwards compat.
+    /* istanbul ignore next */
+    prototypeAccessors.child.get = function () {
+        return this.componentInstance
+    };
+
+    Object.defineProperties( VNode.prototype, prototypeAccessors );
+
+    var createEmptyVNode = function () {
+        var node = new VNode();
+        node.text = '';
+        node.isComment = true;
+        return node
+    };
+
+    function createTextVNode (val) {
+        return new VNode(undefined, undefined, undefined, String(val))
+    }
+
+    function cloneVNode(vnode){
+        var cloned = new VNode(
+            vnode.tag,
+            vnode.data,
+            vnode.children,
+            vnode.text,
+            vnode.elm,
+            vnode.context,
+            vnode.context,
+            vnode.componentOptions
+        );
+        cloned.ns = vnode.ns;
+        cloned.isStatic = vnode.isStatic;
+        cloned.key = true;
+        cloned.isCloned = true;
+        return cloned;
+    }
+
+    function cloneVNodes(vnodes) {
+        var len = vnodes.length;
+        var res = new Array(len);
+        for(var i=0;i<len;i++){
+            res[i] = cloneVNode(vnodes[i]);
+        }
+        return res;
+
+    }
+    var normalizeEvent = cached(function (name) {
+        var once$$1 = name.charAt(0) === '~'; // Prefixed last, checked first
+        name = once$$1 ? name.slice(1) : name;
+        var capture = name.charAt(0) === '!';
+        name = capture ? name.slice(1) : name;
+        return {
+            name: name,
+            once: once$$1,
+            capture: capture
+        }
+    });
+
+    function createFnInvoker(fns){
+        function invoker(){
+            var arguments$1 = arguments;
+            var fns = invoker.fns;
+            if(Array.isArray(fns)){
+                for(var i=0;i<fns.length;i++){
+                    fns[i].apply(null,arguments$1);
+                }
+            }else{
+                return fns.apply(null,arguments);
+            }
+        }
+        invoker.fns = fns;
+        return invoker;
+    }
+
+    function updateListener(
+        on,
+        oldOn,
+        add,
+        remove$$1,
+        vm
+    ){
+        var name,cur,old,event;
+        for(name in on){
+            cur = on[name];
+            old = oldOn[name];
+            event = normalizeEvent(event);
+            if(!cur){
+                "development" !== 'production' && warn(
+                    "Invalid handler for event \"" + (event.name) + "\": got " + String(cur),
+                    vm
+                );
+            }else if(!old){
+                if(!cur.fns){
+                    cur = on[name] = createFnInvoker(cur);
+                }
+                add(event.name,cur,event.once,event.capture);
+            }else if(cue!==old){
+                old.fns = cur;
+                on[name] = old;
+            }
+        }
+        for(name in oldOn){
+            if(!on[name]){
+                event = normalizeEvent(name);
+                remove$$1(event.name,oldOn[name],event.capture);
+            }
+        }
+    }
+
+    function mergeVNodeHook (def, hookKey, hook) {
+        var invoker;
+        var oldHook = def[hookKey];
+
+        function wrappedHook () {
+            hook.apply(this, arguments);
+            // important: remove merged hook to ensure it's called only once
+            // and prevent memory leak
+            remove(invoker.fns, wrappedHook);
+        }
+
+        if (!oldHook) {
+            // no existing hook
+            invoker = createFnInvoker([wrappedHook]);
+        } else {
+            /* istanbul ignore if */
+            if (oldHook.fns && oldHook.merged) {
+                // already a merged invoker
+                invoker = oldHook;
+                invoker.fns.push(wrappedHook);
+            } else {
+                // existing plain hook
+                invoker = createFnInvoker([oldHook, wrappedHook]);
+            }
+        }
+
+        invoker.merged = true;
+        def[hookKey] = invoker;
+    }
+
+
+    function simpleNormalizeChildren(children) {
+        for(var i=0;i<children.length;i++){
+            if(Array.isArray(children[i])){
+                return Array.prototype.concat.apply([],children);
+            }
+        }
+        return children
+    }
+
+    function normalizeChildren (children) {
+        return isPrimitive(children)
+            ? [createTextVNode(children)]
+            : Array.isArray(children)
+                ? normalizeArrayChildren(children)
+                : undefined
+    }
+
+    function normalizeArrayChildren (children, nestedIndex) {
+        var res = [];
+        var i, c, last;
+        for (i = 0; i < children.length; i++) {
+            c = children[i];
+            if (c == null || typeof c === 'boolean') { continue }
+            last = res[res.length - 1];
+            //  nested
+            if (Array.isArray(c)) {
+                res.push.apply(res, normalizeArrayChildren(c, ((nestedIndex || '') + "_" + i)));
+            } else if (isPrimitive(c)) {
+                if (last && last.text) {
+                    last.text += String(c);
+                } else if (c !== '') {
+                    // convert primitive to vnode
+                    res.push(createTextVNode(c));
+                }
+            } else {
+                if (c.text && last && last.text) {
+                    res[res.length - 1] = createTextVNode(last.text + c.text);
+                } else {
+                    // default key for nested array children (likely generated by v-for)
+                    if (c.tag && c.key == null && nestedIndex != null) {
+                        c.key = "__vlist" + nestedIndex + "_" + i + "__";
+                    }
+                    res.push(c);
+                }
+            }
+        }
+        return res
+    }
+
+    /*  */
+
+    function getFirstComponentChild (children) {
+        return children && children.filter(function (c) { return c && c.componentOptions; })[0]
+    }
+
+    function initEvent(vm){
+        vm._events = Object.create(null);
+        vm._hasHookEvent = false;
+        var listeners = vm.$options._parentListeners;
+        if(listeners) {
+            updateComponentListeners(vm,listeners);
+        }
+    }
+
+    var target;
+
+    function add (event,fn,once$$1){
+        if(once$$1){
+            target.$once(event,fn);
+        }else{
+            target.$on(event,fn);
+        }
+    }
+
+    function remove$1(event,fn){
+        target.$off(event,fn);
+    }
+
+    function updateComponentListeners(
+        vm,
+        listeners,
+        oldListeners
+    ){
+        target = vm;
+        updateComponentListeners(listeners,oldListeners||{},add,remove$1,vm);
+    }
+
+  function eventMixin(Vue){
+            var hookRE = /^hook:/;
+            Vue.prototype.$on = function(event,fn){
+                var this$1 = this;
+                var vm = this;
+                if(Array.isArray(event)){
+                    for(var i=0,l=event.length;i<l;i++){
+                        this$1.$on(event[i],fn);
+                    }
+                }else{
+                    (vm._events[event] || (vm._events[event])).push(fn);
+                    if(hookRE.test(event)){
+                        vm._hasHookEvent = true;
+                    }
+                }
+                return vm;
+            }
+
+            Vue.prototype.$off = function (event,fn) {
+                var this$1 = this;
+                var vm = this;
+                if(!arguments.length){
+                    vm._events = Object.create(null);
+                    return vm
+                }
+            }
+
+            var cbs = vm._events[event];
+            if(!cbs){
+                return vm;
+            }
+            if(arguments.length===1){
+                vm._events[event] = null;
+                return vm
+            }
+
+            var cb;
+            var i = cbs.length;
+            while(i--){
+                cb = cbs[i];
+                if(cb === fn || cb.fn === fn){
+                    cbs.splice(i,1);
+                    break
+                }
+            }
+            return vm
+  };
+
+Vue.prototype.$emit = function(event){
+    var vm = this;
+    {
+        var lowerCaseEvent = event.toLowerCase();
+        if(lowerCaseEvent !== event && vm._events[lowerCaseEvent]){
+            tip(
+                "Event \"" + lowerCaseEvent + "\" is emitted in component " +
+                (formatComponentName(vm)) + " but the handler is registered for \"" + event + "\". " +
+                "Note that HTML attributes are case-insensitive and you cannot use " +
+                "v-on to listen to camelCase events when using in-DOM templates. " +
+                "You should probably use \"" + (hyphenate(event)) + "\" instead of \"" + event + "\"."
+            );
+        }
+    }
+    var cbs = vm._events[event];
+    if(cbs) {
+        cbs = cbs.length > 1 ? toArray(cbs) : cbs;
+        var args = toArray(arguments,1);
+        for(var i=0,l=cbs.length;i<l;i++){
+            cbs[i].apply(vm,args);
+        }
+    }
+    return vm;
+};
+
+function resolveSlots (
+    children,
+    context
+) {
+    var slots = {};
+    if(!children){
+        return slots;
+    }
+    var defaultSlot = [];
+    var name,child;
+    for(var i=0,l= children.length;i<l;i++){
+        child = children[i];
+        if((child.context === context || child.functionalContext === context) &&
+                child.data && (name=child.data.slot)){
+            var slot = (slots[name]||(slots[name]=[]));
+            if(child.tag === 'template'){
+                slot.push.apply(slot,child.children);
+            }else{
+                slot.push(child);
+            }
+        }else{
+            defaultSlot.push(child);
+        }
+    }
+    if(!defaultSlot.every(isWhitespace)){
+        slots.default = defaultSlot;
+    }
+    return slots;
+}
+
+function isWhitespace(node){
+    return node.isComment || node.text === ' '
+}
+
+function resolveScopedSlots (
+   fns
+){
+    var res = {};
+    for(var i=0;i<fns.length;i++){
+        res[fns[i][0]] = fns[i][1];
+    }
+    return res
+}
+
+
+
 
 
 
