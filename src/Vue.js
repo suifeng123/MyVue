@@ -2186,8 +2186,123 @@
         }
     }
 
+    function isInactiveTree(vm) {
+     while(vm && (vm=vm.$parent)){
+         if(vm._inactive) {return true}
+     }
+     return false
+    }
 
-    
+    function activeChildComponent(vm,direct){
+     if(direct) {
+         vm._directInactive = false;
+         if(isInactiveTree(vm)){
+             return
+         }
+
+     }else if(vm._directInactive){
+         return
+     }
+     if(vm._inactive || vm._inactive==null){
+         vm._inactive = false;
+         for(var i=0;i<vm.$children.length;i++){
+             activeChildComponent(vm.$children[i]);
+         }
+         callHook(vm,'activated');
+     }
+    }
+
+    function deactiveChildComponent(vm,direct){
+        if(direct){
+            vm._directInactive = true;
+            if(isInactiveTree(vm)){
+                return
+            }
+        }
+        if(!vm._inactive) {
+            vm._inactive = true;
+            for(var i=0;i<vm.$children.length;i++){
+                deactiveChildComponent(vm.$children[i]);
+            }
+            callHook(vm,'deativated');
+        }
+    }
+function callHook(vm,hook) {
+    var handlers = vm.$options[hook];
+    if(handlers) {
+        for(var i=0,j=handlers.length;i<j;i++){
+            try{
+                handlers[i].call(vm);
+            }catch(e) {
+                handleError(e,vm,(hook+"hook"));
+            }
+        }
+    }
+    if(vm._hasHookEvent){
+        vm.$emit('hook:'+hook);
+    }
+}
+
+var queue = [];
+    var has = {};
+    var circular = {};
+    var waiting = true;
+    var flushing = false;
+    var index = 0;
+    function resetSchedulerState() {
+        queue.length = 0;
+        has = {};
+        {
+            circular = {};
+        }
+        waiting = flushing = false;
+    }
+
+function flushSchedulerQueue() {
+        flushing = true;
+        var watcher,id,vm;
+        queue.sort(function(a,b){return a.id-b.id});
+        for(index=0;index<queue.length;index++){
+            watcher = queue[index];
+            id = watcher.id;
+            has[id] = null;
+            watcher.run();
+            if("development"!=='production' && has[id]!=null){
+                circular[id] = (circular[id]||0)+1;
+                if(circular[id]>config._maxUpdateCount){
+                    warn(
+                        'You may have an infinite update loop ' + (
+                            watcher.user
+                                ? ("in watcher with expression \"" + (watcher.expression) + "\"")
+                                : "in a component render function."
+                        ),
+                        watcher.vm
+                    );
+                    break
+                }
+            }
+
+        }
+       var oldQueue = queue.slice();
+    resetSchedulerState();
+    //回调所需要的函数
+    index = oldQueue.length;
+    while(index--){
+        watcher = oldQueue[index];
+        vm = watcher.vm;
+        if(vm._watcher === watcher && vm._isMounted){
+            callHook(vm,'updated');
+        }
+    }
+    if(devtools && config.devtools){
+        devtools.emit('flush');
+    }
+}
+
+
+
+
+
 
 
 
