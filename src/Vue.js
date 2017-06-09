@@ -2299,6 +2299,153 @@ function flushSchedulerQueue() {
     }
 }
 
+function queueWatcher(watcher) {
+        var id = wacther.id;
+        if(has[id]==null){
+            has[id] = true;
+            if(!flushing){
+                queue.push(watcher)
+            }else{
+                var i= queue.length-1;
+                while(i>=0&&queue[i].id>watcher.id){
+                    i--;
+                }
+                queue.splice(Math.max(i,index)+1,0,watcher);
+            }
+            //queue the flush
+            if(!waiting){
+                waiting = true;
+                nextTick(flushSchedulerQueue);
+            }
+
+        }
+}
+
+var uid$s = 0;
+
+    var Watcher = function Watcher (
+        vm,
+        expOrFn,
+        cb,
+        options
+    ) {
+        this.vm = vm;
+        vm._watchers.push(this);
+        // options
+        if (options) {
+            this.deep = !!options.deep;
+            this.user = !!options.user;
+            this.lazy = !!options.lazy;
+            this.sync = !!options.sync;
+        } else {
+            this.deep = this.user = this.lazy = this.sync = false;
+        }
+        this.cb = cb;
+        this.id = ++uid$2; // uid for batching
+        this.active = true;
+        this.dirty = this.lazy; // for lazy watchers
+        this.deps = [];
+        this.newDeps = [];
+        this.depIds = new _Set();
+        this.newDepIds = new _Set();
+        this.expression = expOrFn.toString();
+        // parse expression for getter
+        if (typeof expOrFn === 'function') {
+            this.getter = expOrFn;
+        } else {
+            this.getter = parsePath(expOrFn);
+            if (!this.getter) {
+                this.getter = function () {};
+                "development" !== 'production' && warn(
+                    "Failed watching path: \"" + expOrFn + "\" " +
+                    'Watcher only accepts simple dot-delimited paths. ' +
+                    'For full control, use a function instead.',
+                    vm
+                );
+            }
+        }
+        this.value = this.lazy
+            ? undefined
+            : this.get();
+    };
+
+
+    Watcher.prototype.get = function get() {
+        pushTarget(this);
+        var value;
+        var vm = this.vm;
+        if(this.user) {
+            try{
+                value = this.getter.call(vm,vm);
+            }catch(e){
+                handleError(e, vm, ("getter for watcher \"" + (this.expression) + "\""));
+            }
+        }else {
+            value = this.getter.call(vm,vm);
+        }
+      if(this.deep){
+            traverse(value);
+      }
+      propTarget();
+      this.cleanupDeps();
+      return value;
+    };
+
+    /**
+     * 添加一个辅助到一个命令上
+     */
+    Watcher.prototype.addDep = function addDep(dep) {
+          var i = dep.id;
+          if(!this.newDepIds.has(id)){
+              this.newDepIds.add(id);
+              this.newDeps.push(dep);
+              if(!this.depIds.has(id)){
+                  dep.addSub(this);
+              }
+          }
+    };
+
+
+    Watcher.prototype.cleanupDeps = function cleanupDeps () {
+        var this$1 = this;
+
+        var i = this.deps.length;
+        while (i--) {
+            var dep = this$1.deps[i];
+            if (!this$1.newDepIds.has(dep.id)) {
+                dep.removeSub(this$1);
+            }
+        }
+        var tmp = this.depIds;
+        this.depIds = this.newDepIds;
+        this.newDepIds = tmp;
+        this.newDepIds.clear();
+        tmp = this.deps;
+        this.deps = this.newDeps;
+        this.newDeps = tmp;
+        this.newDeps.length = 0;
+    };
+
+    Watcher.prototype.update = function update() {
+        if(this.lazy){
+            this.dirty = true;
+        }else if(this.sync){
+            this.run();
+
+        }else{
+            queueWatcher(this);
+        }
+    };
+
+    Watcher.prototype.run = function run() {
+        if(this.active){
+            var value = this.get();
+            if(value!==this.value || isObject(value)||this.deep)
+        }
+    }
+
+
+
 
 
 
