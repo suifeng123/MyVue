@@ -2440,9 +2440,464 @@ var uid$s = 0;
     Watcher.prototype.run = function run() {
         if(this.active){
             var value = this.get();
-            if(value!==this.value || isObject(value)||this.deep)
+            if(value!==this.value || isObject(value)||this.deep){
+                var oldValue = this.value;
+                this.value = value;
+                if(this.user){
+                    try{
+                        this.cb.call(this.vm,value,oldValue);
+                    }catch (e) {
+                        handleError(e, this.vm, ("callback for watcher \"" + (this.expression) + "\""));
+
+                    }
+                }else{
+                    this.cb.call(this.vm,value,oldValue);
+                }
+            }
+        }
+    };
+
+    Watcher.prototype.evaluate = function evalutate() {
+        this.value = this.get();
+        this.dirty = false;
+    }
+
+    Watcher.prototype.depend = function depend() {
+        var this$1 = this;
+        var i=  this.deps.length;
+        while(i--){
+            this$1.deps[i].depend();
+        }
+    };
+
+
+    Watcher.prototype.teardown = function teardown () {
+        var this$1 = this;
+
+        if (this.active) {
+            // remove self from vm's watcher list
+            // this is a somewhat expensive operation so we skip it
+            // if the vm is being destroyed.
+            if (!this.vm._isBeingDestroyed) {
+                remove(this.vm._watchers, this);
+            }
+            var i = this.deps.length;
+            while (i--) {
+                this$1.deps[i].removeSub(this$1);
+            }
+            this.active = false;
+        }
+    };
+
+    var seenObjects = new _Set();
+    function traverse(val) {
+        seenObjects.clear();
+        _traverse(val,seenObjects);
+    }
+
+    function _traverse(val,seen){
+        var i,keys;
+        var isA = Array.isArray(val);
+        if((!isA && !isObject(val))|| !object.isExtensible(val)){
+            return
+        }
+        if(val.__ob__){
+            var depId = val.__ob__.dep.id;
+            if(seen.has(depId)){
+                return
+            }
+            seen.add(depId);
+        }
+        if(isA){
+            i= val.length;
+            while(i--){_traverse(val[i],seen);}
+        }else{
+            keys = Object.keys(val);
+            i = keys.length;
+            while(i--){_traverse(val[keys[i]],seen);}
         }
     }
+
+    var sharedPropertyDefinition = {
+        enumerable: true,
+        configurable:true,
+        get:noop,
+        set:noop
+    };
+
+    function proxy (target,sourceKey,key){
+        sharedPropertyDefinition.get = function proxyGetter() {
+            return this[sourceKey][key];
+        };
+        sharedPropertyDefinition.set = function proxySetter(val) {
+            this[sourceKey][key] = val;
+        }
+        Object.defineProperty(target,key,sharedPropertyDefinition);
+    }
+
+    function initState(vm){
+        vm._watcher = [];
+        var opts = vm.$options;
+        if(opts.props){initProps(vm,opts.props);}
+        if(opts.methods){initMethods(vm,opts.methods);}
+        if(opts.data){
+            initData(vm);
+        }else{
+            observe(vm._data = {},true);
+        }
+        if(opts.computed){initComputed(vm,opts.computed);}
+        if(opts.watch){initWatch(vm,opts.watch);}
+    }
+
+    var isReservedProp = {key:1,ref:1,slot:1};
+
+    function initProps(vm,propsOptions){
+        var propsData = vm.$option.propsData||{};
+        var props = vm._props = {};
+        var keys = vm.$options._propKeys = [];
+        var isRoot = !vm.$parent;
+        //根节点应该被替换
+        observerState.shouldConvert = isRoot;
+        var loop = function(key){
+            keys.push(key);
+            var value = validateProp(key,propsOptions,propData,vm);
+            {
+                if(isReservedProp[key]){
+                    warn(
+                        ("\"" + key + "\" is a reserved attribute and cannot be used as component prop."),
+                        vm
+                    );
+                }
+                defineReactive$$1(props,key,value,function() {
+                    if(vm.$parent && !observerState.isSettingProps){
+                        warn(
+                            "Avoid mutating a prop directly since the value will be " +
+                            "overwritten whenever the parent component re-renders. " +
+                            "Instead, use a data or computed property based on the prop's " +
+                            "value. Prop being mutated: \"" + key + "\"",
+                            vm
+                        );
+                    }
+                });
+            }
+           if(!(key in vm)){
+                proxy(vm,"_props",key);
+           }
+        };
+        for(var key in propsOptions) loop(key);
+        observerState.shouldConvert = true;
+    }
+
+    function initData(vm) {
+        var data = vm.$options.data;
+        data = vm._data = typeof data === 'function'?getData(data,vm):data||{};
+        if(!isPlainObject(data)){
+            data = {};
+            "development" !== 'production' && warn(
+                'data functions should return an object:\n' +
+                'https://vuejs.org/v2/guide/components.html#data-Must-Be-a-Function',
+                vm
+            );
+        }
+    var keys = Object.keys(data);
+        var props = vm.$options.props;
+        var i = keys.length;
+        while(i--){
+            if (props && hasOwn(props, keys[i])) {
+                "development" !== 'production' && warn(
+                    "The data property \"" + (keys[i]) + "\" is already declared as a prop. " +
+                    "Use prop default value instead.",
+                    vm
+                );
+            } else if (!isReserved(keys[i])) {
+                proxy(vm, "_data", keys[i]);
+            }
+        }
+        //监控数据
+        observe(data,true);
+    }
+
+    function getData(data,vm){
+        try{
+            return data.call(vm)
+        }catch(e){
+            handleError(e,vm,"data()");
+            return {}
+        }
+    }
+
+    var computedWatcherOptions = {lazy:true};
+
+function initComputed (vm,computed) {
+    var watchers = vm._computedWatchers = Object.create(null);
+
+    for(var key in computed) {
+        var userDef = computed[key];
+        var getter = typeof userDef === 'function'?userDef:userDef.get;
+        {
+            if(getter===undefined){
+                warn(
+                    ("No getter function has been defined for computed property \"" + key + "\"."),
+                    vm
+                );
+                getter = noop;
+            }
+        }
+        //创建内部的监听器为计算的属性
+        watchers[key] = new Watcher(vm,getter,noop,computedWatcherOptions);
+        if(!(key in vm)){
+            definedComputed(vm,key,userDef);
+        }
+
+    }
+}
+
+function defineCoputed(target,key,userDef){
+    if(type userDef === 'function'){
+        sharedPropertyDefinition.get = createComputedGetter(key);
+        sharedPropertyDefinition.set = noop;
+    }else{
+        sharedPropertyDefinition.get = userDef.get?userDef.cache!==false
+            ?createComputedGetter(key)
+                :userDef.get
+            :noop;
+        sharedPropertyDefinition.set = userDef.set?userDef.set:noop;
+    }
+    Object.defineProperty(target,key,sharedPropertyDefinition);
+}
+
+function createComputedGetter(key){
+    return function computedGetter() {
+        var watcher = this._computedWatchers && this._computedWatchers[key];
+        if(watcher){
+          if(watcher.dirty){
+              watcher.evaluate();
+          }
+          if(Dep.target){
+              watcher.depend();
+          }
+          return watcher.value;
+        }
+    }
+}
+
+function initMethods(vm,methods){
+    var props = vm.$options.props;
+    for(var key in methods){
+        vm[key] = methods[key] ==null?noop:bind(methods[key],vm);
+        {
+            if(methods[key]===null){
+                warn(
+                    "method \"" + key + "\" has an undefined value in the component definition. " +
+                    "Did you reference the function correctly?",
+                    vm
+                );
+            }
+            if(props && hasOwn(props,key)){
+                warn(
+                    ("method \"" + key + "\" has already been defined as a prop."),
+                    vm
+                );
+            }
+        }
+    }
+}
+
+
+function initWatch(vm,watch) {
+    for(var key in watch){
+        var handler = watch[key];
+        if(Array.isArray(handler)){
+            for(var i=0;i<handler.length;i++){
+                createWatcher(vm,key,handler[i]);
+            }
+        }else{
+            createWatcher(vm,key,handler);
+        }
+    }
+
+}
+
+function createWatcher(vm,key,handler){
+    var options;
+    if(isPlainObject(handler)){
+        options = handler;
+        handler = handler.handler;
+    }
+    if(typeof handler === 'string'){
+        handler = vm[handler];
+    }
+    vm.$watch(key,handler,options);
+}
+
+
+function stateMixin(Vue){
+    var dataDef = {};
+    dataDef.get = function () {
+        return this._data;
+    }
+    var propsDef = {};
+    propsDef.get = function () {
+        return this._props;
+    }
+    {
+        dataDef.set = function (newData) {
+            warn(
+                'Avoid replacing instance root $data. ' +
+                'Use nested data properties instead.',
+                this
+            );
+        };
+        propsDef.set = function(){
+            warn("$props is readonly.", this);
+        }
+
+    }
+    Object.defineProperty(Vue.prototype,"$data",dataDef);
+    Object.defineProperty(Vue.prototype,"$props",propsDef);
+
+     Vue.prototype.$set = set;
+     Vue.prototype.$delete = del;
+
+     Vue.prototype.$watch = function(
+       exOrFn,
+       cb,
+       options
+     ){
+         var vm = this;
+         options = options || {};
+         options.user = true;
+         var watcher = new Watcher(vm,exOrFn,cn,options);
+         if(options.ismmediate){
+             cb.call(vm,watcher.value);
+         }
+         return function unwatchFn(){
+             watcher.teardown();
+         }
+     };
+
+}
+
+var componentVNodeHooks = {
+    init: function init(
+        vnode,
+        hydrating,
+        parentElm,
+        refElm
+    ){
+        if(!vnode.componentInstance || vnode.componentInstance._isDestroyed) {
+            var child = vnode.componentInstance = createComponentInstanceForVnode(
+                vnode,
+                activeInstance,
+                parentElm,
+                refElm
+            );
+            child.$mount(hydrating?vonde.elm:undefined,hydrating);
+        }else if(vnode.data.keepAlive){
+            var mountedNode = vnode;
+            componentVNodeHooks.prepatch(mountedNode,mountedNode);
+        }
+    },
+    prepatch: function prepatch(oldVnode,vnode){
+            var options = vnode.componentOptions;
+            var child = vnode.componentInstance = oldVnode.componentInstance;
+            updateChildComponent(
+                child,
+                options.propsData,
+                options.listeners,
+                vnode,
+                options.children
+            );
+    },
+    insert: function insert(vnode){
+        if(!vnode.componentInstance._isMounted){
+            vnode.componentInstance._isMounted = true;
+            callHook(vnode.componentInstance,"mounted");
+        }
+        if(vnode.data.keepAlive){
+            activeChildComponent(vnode.componentInstance,true);
+        }
+
+    },
+    destroy: function destroy(vnode) {
+        if(!vnode.componentInstance._isDestroyed){
+            if(!vnode.data.keepAlive){
+                vnode.componentInstance.$destory();
+            }else{
+                deactiveChildComponent(vnode.componentInstance,true);
+            }
+        }
+
+    }
+};
+
+var hooksToMerge = Object.keys(componentVNodeHooks);
+
+function createComponent(
+    Ctor,
+    data,
+    context,
+    children,
+    tag
+){
+    if(!Ctor){
+        return
+    }
+    var baseCtor = context.$options._base;
+    if(isObject(Ctor)){
+        Ctor = baseCtor.extend(Ctor);
+    }
+    if(typeof Ctor !== 'function'){
+        {
+
+        }
+        return
+    }
+    if(!Ctor.cid){
+        if(Ctor.resolved){
+            Ctor = Ctor.resolved;
+        }else {
+            Ctor = resolveAsyncComponent(Ctor,baseCtor,function(){
+               context.$forceUpdate();
+            });
+            if(!Ctor){
+                return
+            }
+        }
+    }
+    resolveConstructorOptions(Ctor);
+
+    data = data || {};
+    if(data.model){
+        transformModel(Ctor.options,data);
+    }
+    //抽取属性
+    var propData = extractProps(data,Ctor,tag);
+    if(Ctor.options.functional){
+        return createFunctionalComponent(Ctor,propData,data,context,children);
+    }
+
+    var listeners = data.on;
+    data.on = data.nativeOn;
+    if(Ctor.options.abstract){
+        data = {};
+    }
+    mergeHook(data);
+
+    var name = Ctor.options.name || tag;
+    var node = new VNode(
+        ("vue-component-" + (Ctor.cid) + (name ? ("-" + name) : '')),
+        data, undefined, undefined, undefined, context,
+        { Ctor: Ctor, propsData: propsData, listeners: listeners, tag: tag, children: children }
+    );
+    return vnode;
+}
+  //源码到3057行
+
+
+
+
+
 
 
 
