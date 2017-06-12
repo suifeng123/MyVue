@@ -3236,6 +3236,62 @@ function renderSlot (
   }
 }
 
+function resolveFilter(id){
+    return resolveAsset(this.$options,'filters',id,true) || identity
+}
+
+function checkKeyCode(
+  eventKeyCode,
+  key,
+  builtInAlias
+    ){
+    var keyCodes = config.keyCodes[key] || builtInAlias;
+    if(Array.isArray(keyCodes)){
+        return keyCodes.indexOf(eventKeyCode) === -1
+    }else{
+        return keyCodes !=== eventKeyCode
+    }
+}
+
+function bindObjectProps (
+    data,
+    tag,
+    value,
+    asProp
+    ){
+    if(value) {
+        if(!isObject(value)){
+             "development" !== 'production' && warn(
+        'v-bind without argument expects an Object or Array value',
+        this
+      );
+         }else{
+           if(Array.isArray(value)){
+            value = toObject(value);
+           } 
+           var hash;
+           for(var key in value){
+            if(key === 'class' || key === 'style'){
+                hash = data;
+            }else{
+                var type = data.attrs && data.attrs.type;
+                hash = asProp || config.mustUseProp(tag,type,key)
+                ? data.domProps || (data.domProps={})
+                : data.attrs || (data.attrs = {})
+            }
+            if(!(key in hash)){
+                hash[key] = value[key];
+            }
+           }
+         }
+    }
+    return data;
+}
+
+//源码到3499
+
+
+
 
 
 
