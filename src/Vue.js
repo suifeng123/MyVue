@@ -2894,6 +2894,142 @@ function createComponent(
 }
   //源码到3057行
 
+function createFunctionalComponent(
+   Ctor,
+   propData,
+   data,
+   context,
+   children
+    ){
+    var props = {};
+    var propOptions = Ctor.options.props;
+    if(propOptions){
+        for(var key in propData){
+            props[key] = validateProp(key,propOptions,propsData);
+        }
+    }
+
+    vat _context = Object.create(context);
+    var h = function(a,b,c,d){
+        return createElement(_context,a,b,c,d,true);
+    }
+    var vnode = Ctor.Options.render.call(null,h,{
+        props: props,
+        data: data,
+        parent:context,
+        children: children,
+        slot: function() {
+            return resolveSlots(children,context);
+        }
+    });
+    if(vnode instanceof VNode){
+        vnode.functionalContext = context;
+        if(data.slot){
+            (vnode.data || (vnode.data = {})).slot = data.slot;
+        }
+    }
+    return vnode;
+}
+
+function createComponentInstanceForVnode(
+    vnode,
+    parent,
+    parentElm,
+    refElm
+){
+       var vnodeComponentOptions = vnode.componentOptions;
+       var options = {
+           _isComponent: true,
+           parent: parent,
+           propsData: vnodeComponentOptions.propsData,
+           _componentTag: vnodeComponentOptions.tag,
+           _parentVnode: vnode,
+           _parentListeners: vnodeComponentOptions.listeners,
+           _renderChildren:vnodeComponentOptions.children,
+           _parentElm:parentElm ||  null,
+           _refElm: refElm || null
+       };
+       var inlineTemplate = vnode.data.inlineTemplate;
+       if(inlineTemplate) {
+           options.render = inlineTemplate.render;
+           options.staticRenderFns = inlineTemplate.staticRenderFns;
+       }
+       return new vnodeComponentOptions.Ctor(options)
+}
+
+
+function resolveAsyncComponent (
+    factory,
+    baseCtor,
+    cb
+){
+        if(factory.requested) {
+            factory.pendingCallbacks.push(cb);
+        }else{
+            factory.requested = true;
+            var cbs = factory.pendingCallbacks = [cb];
+            var sync = true;
+
+            var resolve = function(res) {
+                if(isObject(res)){
+                    res = baseCtor.extend(res);
+                }
+                //缓存解决
+                factory.resolved = res;
+                if(!sync) {
+                    for(var i=0,l=cbs.length;i<l;i++){
+                        cbs[i](res);
+                    }
+                }
+            };
+            var reject = function(reason) {
+                "development" !== 'production' && warn(
+                    "Failed to resolve async component: " + (String(factory)) +
+                    (reason ? ("\nReason: " + reason) : '')
+                );
+            }
+            var res = factory(resolve,reject);
+            //处理 promise
+            if(res && typeof res.then === 'function' && !factory.resolved){
+                res.then(resolve,reject);
+            }
+
+            sync = false;
+
+       return factory.resolved;
+        }
+}
+
+function extractProps (data,Ctor,tag) {
+    var propOptions = Ctor.options.props;
+    if(!propOptions) {
+        return
+    }
+    var res = {};
+    var attrs = data.attrs;
+    var props = data.props;
+    var domProps = data.domProps;
+    if(attr|| props || domProps){
+        var altKey = hydrate(key);
+        {
+            var keyInLowerCase = key.toLowerCase();
+            if(key !== keyInLowerCase && attrs && attrs.hasOwnProperty(keyInLowerCase)){
+                tip(
+            "Prop \"" + keyInLowerCase + "\" is passed to component " +
+            (formatComponentName(tag || Ctor)) + ", but the declared prop name is" +
+            " \"" + key + "\". " +
+            "Note that HTML attributes are case-insensitive and camelCased " +
+            "props need to use their kebab-case equivalents when using in-DOM " +
+            "templates. You should probably use \"" + altKey + "\" instead of \"" + key + "\"."
+          );   
+            }
+        }
+
+        checkProp(res,props,key,altKey,true) || checkProp(res,attrs,key,altKey)
+        || checkProp(res, domProps, key, altKey);
+    }
+    return res;
+}
 
 
 
@@ -2902,8 +3038,30 @@ function createComponent(
 
 
 
-
-
+function checkProp(
+   res,
+   hash,
+   key,
+   altKey,
+   preserve
+){
+    if(hash){
+        if(hasOwn(hash,key)){
+            res[key] = hash[key];
+            if(!prepatch){
+                delete hash[key];
+            }
+            return true
+        }
+    }else if(hasOwn(hash,altKey){
+        res[key] = hash[altKey];
+        if(!preserve){
+            delete hash[altKey];
+        }
+        return true;
+    }
+    return false;
+}
 
 
 
