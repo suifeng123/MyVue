@@ -6,7 +6,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="43661585-2094-44e0-84a6-ad8f7d3bb2de" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Vue.js" afterPath="$PROJECT_DIR$/src/Vue.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -31,8 +30,8 @@
       <file leaf-file-name="Vue.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Vue.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="538">
-              <caret line="2997" column="0" lean-forward="false" selection-start-line="2997" selection-start-column="0" selection-end-line="2997" selection-end-column="0" />
+            <state relative-caret-position="362">
+              <caret line="3301" column="19" lean-forward="false" selection-start-line="3301" selection-start-column="19" selection-end-line="3301" selection-end-column="19" />
               <folding>
                 <element signature="e#22700#24534#0" expanded="false" />
               </folding>
@@ -144,10 +143,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
+    <option name="x" value="71" />
+    <option name="y" value="166" />
     <option name="width" value="1382" />
-    <option name="height" value="744" />
+    <option name="height" value="785" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -282,11 +281,12 @@
       <workItem from="1496902991840" duration="6789000" />
       <workItem from="1496989586274" duration="9787000" />
       <workItem from="1497249755942" duration="1767000" />
+      <workItem from="1497332955277" duration="171000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="87444000" />
+    <option name="totallyTimeSpent" value="87615000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -298,8 +298,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="false" />
+    <frame x="71" y="166" width="1382" height="785" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23958333" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -792,8 +792,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Vue.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="538">
-          <caret line="2997" column="0" lean-forward="false" selection-start-line="2997" selection-start-column="0" selection-end-line="2997" selection-end-column="0" />
+        <state relative-caret-position="362">
+          <caret line="3301" column="19" lean-forward="false" selection-start-line="3301" selection-start-column="19" selection-end-line="3301" selection-end-column="19" />
           <folding>
             <element signature="e#22700#24534#0" expanded="false" />
           </folding>
