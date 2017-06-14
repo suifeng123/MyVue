@@ -3302,6 +3302,18 @@ function bindObjectProps (
         return tree
     }
 
+    function pruneCache(cache,filter){
+        for(var key in cache){
+            var cacheNode = cache[key];
+            if(cacheNode){
+                var name = getComponentName(cacheNode.componentOptions);
+                if(name && !filter(name)){
+                    pruneCacheEntry(cacheNode);
+                    cache[key] = null;
+                }
+            }
+        }
+    }
 
 
 
