@@ -3323,6 +3323,38 @@ function bindObjectProps (
         }
     }
 
+    var inPre = 0;
+
+    function createElm(vnode,insertedVnodeQueue,parentElm,refElm,nested) {
+        vnode.isRootInsert = !nested; //
+        if(createComponent(vnode,insertedVnodeQueue,parentElm,refElm)){
+            return
+        }
+        var data = vnode.data;
+        var children = vnode.children;
+        var tag = vnode.tag;
+        if(isDef(tag)){
+            {
+                if(data && data.pre){
+                    onPre++;
+                }
+                if(!pre && !vnode.ns &&
+                !(config.ignoredElements.length && config.ignoredElements.indexOf(tag)>-1)&&
+                config.isUnknowElement(tag)){
+                    warn(
+                        'Unknown custom element: <' + tag + '> - did you ' +
+                        'register the component correctly? For recursive components, ' +
+                        'make sure to provide the "name" option.',
+                        vnode.context
+                    );
+                }
+            }
+            vnode.elm = vnode.ns ? nodeOps.createElementNS(vnode.ns,tag)
+                :nodeOps.createElement(tag,vnode);
+            setScope(vnode);
+        }
+    }
+
 
 
 
