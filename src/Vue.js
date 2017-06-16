@@ -3355,7 +3355,18 @@ function bindObjectProps (
         }
     }
 
-
+var directives = {
+    create: updateDirectives,
+    update: updateDirectives,
+    destory: function unbindDirective(vnode){
+        updateDirectives(vnode,emptyNode);
+    }
+};
+    function updateDirectives(oldVnode,vnode){
+        if(oldVnode.data.directives || vnode.data.directives){
+            _update(oldVnode,vnode);
+        }
+    }
 
 
 
