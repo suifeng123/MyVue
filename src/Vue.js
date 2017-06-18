@@ -3399,7 +3399,133 @@ var directives = {
         return res;
     });
 
+function getStyle(vnode,checkChild){
+    var res = {};
+    var styleData;
+     if(checkChild){
+         var childNode = vnode;
+         while(childNode.componentInstance){
+             childNode = childNode.componentInstance._vnode;
+             if(childNode.data && (styleData= normalizeStyleData(childNode.data))){
+                 extend(res,styleData);
+             }
+         }
 
+     }
+    return res;
+}
+
+    function nextFrame(fn){
+        raf(function(){
+            raf(fn);
+        })
+    }
+
+    function addTransitionClass(el,cls){
+        (el._transitionClasses || (el._transitionClasses=[])).push(cls);
+        addClass(el,cls);
+    }
+
+    var cb = el._enterCb = once(function(){
+        if(expectsCSS){
+            removeTransitionClass(el,toClass);
+            removeTransitionClass(el,activeClass);
+        }
+        if(cb.cancelled){
+            if(expectsCSS){
+                removeTransitionClass(el,startClass);
+            }
+            enterCancelledHook && enterCancelledHook(el);
+        }else{
+            afterEnterHook && afterEnterHook(el);
+        }
+        el._enterCb = null;
+    });
+
+    if(!vnode.data.show){
+        mergeVNodeHook(vnode.data.hook || (vnode.data.hook={}),'insert',function(){
+            var parent = el.parentNode;
+            var pendingNode = parent && parent._pending && pending._pending[vnode.key];
+            if(pendingNode && pendingNode.tag === vnode.tag && pendingNode.elm._leaveCb){
+                pendingNode.elm._leaveCb();
+            }
+            enterHook && enterHook(el,cb);
+        });
+    }
+
+
+
+    function performLeave() {
+        if(cb.cancelled){
+            return
+        }
+        if(!vnode.data.show){
+            (el.parentNode._pending || (el.parentNode._pending={}))[vnode.key] = vnode;
+        }
+     beforeLeave && beforeLeave(el);
+        if(expectsCSS){
+            addTransitionClass(el,leaveClass);
+            addTransitionClass(el,leaveActiveClass);
+        }
+    }
+
+  //仅在开发环境中使用
+    function checkDuration(val,name,vnode){
+        if(typeof val !== 'number'){
+            warn(
+                "<transition> explicit " + name + " duration is not a valid number - " +
+                "got " + (JSON.stringify(val)) + ".",
+                vnode.context
+            );
+        }else if(isNaN(val)){
+            warn(
+                "<transition> explicit " + name + " duration is NaN - " +
+                'the duration expression might be incorrect.',
+                vnode.context
+            );
+        }
+    }
+
+    function isValidDuration(val){
+        return typeof val === 'number' && !isNaN(val)
+    }
+
+    function getHookArgumentsLength(fn) {
+        if(!fn) { return false};
+        var invokeFns = fn.fns;
+        if(invokeFns){
+            return getHookArgumentsLength(
+                Array.isArray(invokeFns)
+                ? invokeFns[0]
+                    :invokerFns
+            )
+        }
+    }
+
+function hasParentTransition(vnode) {
+    while((vnode = vnode.parent)){
+        if(vnode.data.transition){
+            return true
+        }
+    }
+}
+
+    function isSameChild(child,oldchild){
+        return oldchild.key === child.key && oldchild.tag === child.tag
+    }
+
+    var Transition = {
+        name: 'transition',
+        props: transitionProps,
+        abstract: true,
+        render: function render(h) {
+            var this$1 = this;
+            var children = this.$slot.default;
+            if(!chilren){
+                return
+            }
+        }
+    }
 
 
 
