@@ -3368,6 +3368,40 @@ var directives = {
         }
     }
 
+    function isInputChanged(elm,newVal){
+        var value = elm.value;
+        var modifiers = elm._vModifiers;//
+        if((modifiers && modifiers.number)||elm.type=="number"){
+            return toNumber(value)!==toNumber(newVal)
+        }
+        if(modifiers && modifiers.trim){
+            return value.trim() !== newVal.trim()
+        }
+        return value !== newVal
+    }
+
+    var domProps = {
+        create: updateDOMProps,
+        update: updateDOMProps
+    };
+    /*  */
+
+    var parseStyleText = cache(function(cssText){
+        var rel = {};
+        var listDelimiter = /;(?![^(]*\))/g;
+        var propertyDelimiter = /:(.+)/;
+        cssText.split(listDelimiter).forEach(function(item){
+            if(item){
+                var tmp = item.split(propertyDelimiter);
+                tmp.length >1 && (res[tmp[0].trim()] = tmp[1].trim())
+            }
+        });
+        return res;
+    });
+
+
+
+
 
 
 
