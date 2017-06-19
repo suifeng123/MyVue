@@ -3635,10 +3635,208 @@ var TransitionGroup = {
         }
     }
 
+};
+
+
+Vue$3.prototype.__patch__ = inBrowser ? patch: noop;
+//公共的 数量函数
+Vue$3.prototype.$mount = function(
+el,
+hydrating
+    ){
+    el = el && inBrowser ? query(el):undefined;
+    return mountComponent(this,el,hydrating);
+};
+
+setTimeout(function() {
+    if(config.devtools){
+        if(devtools){
+            devtools.emit('init',Vue$3);
+        }else if("development" !== 'production' && isChrome){
+         console[console.info ? 'info' : 'log'](
+        'Download the Vue Devtools extension for a better development experience:\n' +
+        'https://github.com/vuejs/vue-devtools'
+      );   
+        }
+    }
+
+    if("development" !== 'production' && config.productionTip !== false 
+        && inBrowser && typeof console !== 'undefined'){
+         console[console.info ? 'info' : 'log'](
+      "You are running Vue in development mode.\n" +
+      "Make sure to turn on production mode when deploying for production.\n" +
+      "See more tips at https://vuejs.org/guide/deployment.html"
+    );
+    }
+},0);
+
+
+function shouldDecode(content,encoded){
+    var div = docuemnt.createElement('div');
+    div.innerHTML = "<div a=\"" + content + "\">";
+    return div.innerHTML.indexOf(encoded) > 0
+}
+
+var isUnaryTag = makeMap(
+  'area,base,br,col,embed,frame,hr,img,input,isindex,keygen,' +
+  'link,meta,param,source,track,wbr'
+);
+
+// Elements that you can, intentionally, leave open
+// (and which close themselves)
+var canBeLeftOpenTag = makeMap(
+  'colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr,source'
+);
+
+// HTML5 tags https://html.spec.whatwg.org/multipage/indices.html#elements-3
+// Phrasing Content https://html.spec.whatwg.org/multipage/dom.html#phrasing-content
+var isNonPhrasingTag = makeMap(
+  'address,article,aside,base,blockquote,body,caption,col,colgroup,dd,' +
+  'details,dialog,div,dl,dt,fieldset,figcaption,figure,footer,form,' +
+  'h1,h2,h3,h4,h5,h6,head,header,hgroup,hr,html,legend,li,menuitem,meta,' +
+  'optgroup,option,param,rp,rt,source,style,summary,tbody,td,tfoot,th,thead,' +
+  'title,tr,track'
+);
+
+var decoder;
+
+function decode(html){
+    decoder = decoder || document.createElement('div');
+
+    docoder.innerHTML = html;
+    return docoder.textContent;
+}
+
+var singleAttrIdentifier = /([^\s"'<>/=]+)/;
+var singleAttrAssign = /(?:=)/;
+var singleAttrValues = [
+  // attr value double quotes
+  /"([^"]*)"+/.source,
+  // attr value, single quotes
+  /'([^']*)'+/.source,
+  // attr value, no quotes
+  /([^\s"'=<>`]+)/.source
+];
+var attribute = new RegExp(
+  '^\\s*' + singleAttrIdentifier.source +
+  '(?:\\s*(' + singleAttrAssign.source + ')' +
+  '\\s*(?:' + singleAttrValues.join('|') + '))?'
+);
+
+// could use https://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-QName
+// but for Vue templates we can enforce a simple charset
+var ncname = '[a-zA-Z_][\\w\\-\\.]*';
+var qnameCapture = '((?:' + ncname + '\\:)?' + ncname + ')';
+var startTagOpen = new RegExp('^<' + qnameCapture);
+var startTagClose = /^\s*(\/?)>/;
+var endTag = new RegExp('^<\\/' + qnameCapture + '[^>]*>');
+var doctype = /^<!DOCTYPE [^>]+>/i;
+var comment = /^<!--/;
+var conditionalComment = /^<!\[/;
+
+var IS_REGEX_CAPTURING_BROKEN = false;
+'x'.replace(/x(.)?/g, function (m, g) {
+  IS_REGEX_CAPTURING_BROKEN = g === '';
+});
+
+// Special Elements (can contain anything)
+var isPlainTextElement = makeMap('script,style,textarea', true);
+var reCache = {};
+
+var decodingMap = {
+  '&lt;': '<',
+  '&gt;': '>',
+  '&quot;': '"',
+  '&amp;': '&',
+  '&#10;': '\n'
+};
+var encodedAttr = /&(?:lt|gt|quot|amp);/g;
+var encodedAttrWithNewLines = /&(?:lt|gt|quot|amp|#10);/g;
+
+function decodeAttr (value, shouldDecodeNewlines) {
+  var re = shouldDecodeNewlines ? encodedAttrWithNewLines : encodedAttr;
+  return value.replace(re, function (match) { return decodingMap[match]; })
+}
+
+function parseHTML(html,options) {
+    var stack = [];
+    var expectHTML = options.expectHTML;
+    var isUnaryTag$$1 = options.isUnaryTag || no;
+    var canBeLeftOpenTag$$1 = options.canBeLeftOpenTag || no;
+    var index = 0;
+    var last,lastTag;
+    while(html) {
+        last = html;
+        //make sure 
+        if(!lastTag || !isPlainTextElement(lastTag)){
+            var textEnd = html.indexOf('<');
+            if(textEnd === 0){
+                if(comment.text(html)){
+                    var commentEnd = html.indexOf('-->');
+                    if(commentEnd >= 0){
+                        advance(commentEnd+3);
+                        continue
+                    }
+                }
+                if(conditionalComment.text(html)){
+                    var conditionEnd = html.indexOf("]>");
+                    if(conditionEnd>=0){
+                        advance(conditionEnd+2);
+                        continue;
+                    }
+                }
+
+               var doctypeMatch = html.math(doctype);
+               if(doctypeMatch) {
+                advance(doctypeMatch[0].length);
+                continue
+               }
+
+               var endTagMatch = html.match(endTag);
+               if(endTagMatch){
+                var curIndex = index;
+                advance(endTagMatch[0].length);
+                parseEndTag(endTagMatch[1],curIndex,index);
+                continue
+               }
+
+            }
+        }
+    }
 }
 
 
+function advance(n) {
+    index += n;
+    html = html.substring(n);
+}
 
+function parseStartTag () {
+    var start = html.match(startTagOpen);
+    if(start) {
+        var match = {
+            tagName: start[1],
+            attrs: [],
+            start: index
+        };
+        advance(start[0].length);
+        var end,attr;
+        while(!(end = html.match(startTagClose)) &&
+            (attr = html.match(attribute))){
+            advance(attr[0].length);
+           match.attrs.push(attr);
+        }
+
+        if(end) {
+            match.unarySlash = end[1];
+            advance(end[0].length);
+            match.end = index;
+            return match;
+        }
+    }
+}
+
+//源码读取到 7527行
 
 
 
