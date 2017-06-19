@@ -3553,7 +3553,88 @@ var TransitionGroup = {
                 warn(("<transition-group> children must be keyed: <" + name + ">"));
             }
         }
+
+        if(prevChildren){
+            var kept = [];
+            var removed = [];
+            for(var i$1 = 0;i$1<prevChildren.length;i$1++){
+                var c$1 = prevChildren[i$1];
+                c$1.data.transition = transitionData;
+                c$1.data.pos = c$1.elm.getBoundingClientRect();
+                if(map[c$1.key]){
+                    kept.push(c$1);
+                }else{
+                 removed.push(c$1);
+                }
+            }
+            this.kept = h(tag,null,kept);
+            this.removed = removed;
+        }
+        return h(tag,null,children);
+    },
+    beforeUpdated: function beforeUpdated() {
+        this.__patch__(
+            this._vnode,
+            this.kept,
+            false,
+            true
+        );
+        this._vnode = this.kept;
+    },
+
+    update: function updated() {
+        var children = this.prevChildren;
+        var moveClass = this.moveClass || ((this.name || 'v')+'-move');
+        if(!children.length || !this.hasMove(children[0].elm,moveClass)){
+            return
+        }
+        children.forEach(callPendingCbs);
+        children.forEach(recordPosition);
+        children.forEach(applyTranslation);
+        var body = document.body;
+        var f = body.offsetHeight;
+
+        children.forEach(function(c){
+            if(c.data.moved){
+                var el = c.elm;
+                var s = el.style;
+                addTransitionClass(el,moveClass);
+                s.transform = s.WebkitTransform = s.transitionDuration = '';
+                el.addEventListener(transitionEndEvent,el._moveCb=function cb(e) {
+                    if(!e || /transform$/.test(e.propertyName)){
+                        el.removeEventListener(transitionEndEvent,cb);
+                        el._moveCb = null;
+                        removeTransitionClass(el,moveClass);
+                    }
+                });
+            }
+        })
+    },
+
+    methods: {
+        hasMove: function hasMove(el,moveClass){
+            if(!hasTransition){
+                return false
+            }
+            if(this._hasMove != null){
+                return this._hasMove
+            }
+            var clone = el.cloneNode();
+
+            if(el._transitionClasses){
+                el._transitionClasses.forEach(function(cls){
+                    removeClass(clone,cls);
+                })
+            }
+           addClass(clone,moveClass);
+           clone.style.display = 'none';
+           this.$el.appendChild(clone);
+           var info = getTransitionInfo(clone);
+           this.$el.removeChild(clone);
+           return (this._hasMove = info.hasTransform)
+        }
     }
+
 }
 
 
