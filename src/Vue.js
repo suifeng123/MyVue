@@ -3838,6 +3838,21 @@ function parseStartTag () {
 
 //源码读取到 7527行
 
+    function handleStartTag(match) {
+        var tagName = match.tagName;
+        var unarySlash = match.unarySlash;
+        if(expectHTML) {
+            if(lastTag === 'p' && isNonPhrasingTag(tagName)){
+                parseHTML(lastTag);
+            }
+            if(canBeLeftOpenTag$$1(tagName) && lastTag === TagName) {
+                parseEndTag(tagName);
+            }
+        }
+
+        var
+    }
+
 
 
 

@@ -33,7 +33,7 @@
         <entry file="file://$PROJECT_DIR$/src/Vue.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.92334497">
-              <caret line="3642" column="0" selection-start-line="3642" selection-start-column="0" selection-end-line="3642" selection-end-column="0" />
+              <caret line="3852" column="11" selection-start-line="3852" selection-start-column="11" selection-end-line="3852" selection-end-column="11" />
               <folding>
                 <element signature="e#22700#24534#0" expanded="false" />
               </folding>
@@ -147,8 +147,8 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-235" />
-    <option name="y" value="27" />
+    <option name="x" value="339" />
+    <option name="y" value="99" />
     <option name="width" value="1603" />
     <option name="height" value="733" />
   </component>
@@ -297,7 +297,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-254" y="33" width="1603" height="733" extended-state="0" />
+    <frame x="339" y="99" width="1603" height="733" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23897764" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -801,7 +801,7 @@
     <entry file="file://$PROJECT_DIR$/src/Vue.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.92334497">
-          <caret line="3642" column="0" selection-start-line="3642" selection-start-column="0" selection-end-line="3642" selection-end-column="0" />
+          <caret line="3852" column="11" selection-start-line="3852" selection-start-column="11" selection-end-line="3852" selection-end-column="11" />
           <folding>
             <element signature="e#22700#24534#0" expanded="false" />
           </folding>
