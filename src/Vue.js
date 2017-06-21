@@ -3848,10 +3848,47 @@ function parseStartTag () {
             if(canBeLeftOpenTag$$1(tagName) && lastTag === TagName) {
                 parseEndTag(tagName);
             }
-        }
 
-        var
     }
+        function processPre(el) {
+        if(getAndRemoveAttr(el,'v-pre')!=null){
+           el.pre = true;
+           }
+        }
+    }
+
+
+    function processKey(el) {
+        var exp = getBindAttr(el,'key');
+        if(exp) {
+            if("development"!=='production' && el.tag === 'template'){
+                warn$2("<template>cannot be keyed Place the key on real elements instead");
+            }
+            el.key = exp;
+        }
+    }
+
+    function processRef(el){
+        var ref = getBindAttr(el,'ref');
+        if(ref){
+            el.ref = ref;
+            el.refInFor = checkInFor(el);
+        }
+    }
+
+
+    function checkFor(el){
+        var parent = el;
+        while(parent){
+            if(parent.for!==undefined){
+                return true
+            }
+            parent = parent.parent;
+        }
+        return false
+    }
+
+
 
 
 
