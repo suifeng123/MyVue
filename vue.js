@@ -12,6 +12,14 @@ function (global, factory) {
     console.log("global是什么"+global);
     console.log('展示一些factory是什么');
     console.log(factory);
+  /**
+   * ()的意思是将这个作用域限制在一定的范围之内，这样这里面的变量受外边的作用域的影响，然后通过传入this,将里面抛出的一些
+   *
+   * 全局变量进行抛出，在这一段代码中一共有两个立即执行函数
+   * 第一个是function(global,factory){}()
+   * 第二个是factory(),其中factory本身是一个函数，假定factory=function(){},那么factory()就可以写成如下的结构
+   * function(){}() 那么他也是一个立即执行函数
+   */
 
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
