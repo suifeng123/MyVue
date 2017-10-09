@@ -5,7 +5,11 @@
     <bookmark url="file://$PROJECT_DIR$/src/Vue.js" line="658" mnemonic="7" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="43661585-2094-44e0-84a6-ad8f7d3bb2de" name="Default" comment="" />
+    <list default="true" id="43661585-2094-44e0-84a6-ad8f7d3bb2de" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testff.html" afterPath="$PROJECT_DIR$/testff.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/vue.js" afterPath="$PROJECT_DIR$/vue.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -26,10 +30,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Vue.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Vue.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Vue.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8871795">
+            <state vertical-scroll-proportion="0.0">
               <caret line="3903" column="17" selection-start-line="3903" selection-start-column="17" selection-end-line="3903" selection-end-column="17" />
               <folding>
                 <element signature="e#22700#24534#0" expanded="false" />
@@ -82,13 +86,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="vue.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="vue.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/vue.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.67419356">
+              <caret line="19" column="8" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="8" />
               <folding>
-                <marker date="1491375838331" expanded="true" signature="240677:240686" placeholder="..." />
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#642#265318#0" expanded="false" />
+                <marker date="1507529270012" expanded="true" signature="208607:208616" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -132,6 +138,7 @@
         <option value="$PROJECT_DIR$/testEcharts.html" />
         <option value="$PROJECT_DIR$/testff.html" />
         <option value="$PROJECT_DIR$/src/Vue.js" />
+        <option value="$PROJECT_DIR$/vue.js" />
       </list>
     </option>
   </component>
@@ -144,9 +151,10 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="40" />
+    <option name="x" value="32" />
+    <option name="y" value="9" />
     <option name="width" value="1382" />
-    <option name="height" value="744" />
+    <option name="height" value="785" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -270,7 +278,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="40" y="0" width="1382" height="744" extended-state="0" />
+    <frame x="32" y="9" width="1382" height="785" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23897764" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -307,7 +315,15 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/vue.js</url>
+          <line>19</line>
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
@@ -370,7 +386,9 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1491375838331" expanded="true" signature="240677:240686" placeholder="..." />
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#642#265318#0" expanded="false" />
+            <marker date="1507529270012" expanded="true" signature="208607:208616" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -426,7 +444,9 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1491375838331" expanded="true" signature="240677:240686" placeholder="..." />
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#642#265318#0" expanded="false" />
+            <marker date="1507529270012" expanded="true" signature="208607:208616" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -482,7 +502,9 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1491375838331" expanded="true" signature="240677:240686" placeholder="..." />
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#642#265318#0" expanded="false" />
+            <marker date="1507529270012" expanded="true" signature="208607:208616" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -538,7 +560,9 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1491375838331" expanded="true" signature="240677:240686" placeholder="..." />
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#642#265318#0" expanded="false" />
+            <marker date="1507529270012" expanded="true" signature="208607:208616" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -594,7 +618,9 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1491375838331" expanded="true" signature="240677:240686" placeholder="..." />
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#642#265318#0" expanded="false" />
+            <marker date="1507529270012" expanded="true" signature="208607:208616" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -650,7 +676,9 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1491375838331" expanded="true" signature="240677:240686" placeholder="..." />
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#642#265318#0" expanded="false" />
+            <marker date="1507529270012" expanded="true" signature="208607:208616" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -725,16 +753,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vue.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1491375838331" expanded="true" signature="240677:240686" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/echarts.min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -773,10 +791,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Vue.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8871795">
+        <state vertical-scroll-proportion="0.0">
           <caret line="3903" column="17" selection-start-line="3903" selection-start-column="17" selection-end-line="3903" selection-end-column="17" />
           <folding>
             <element signature="e#22700#24534#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vue.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.67419356">
+          <caret line="19" column="8" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="8" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#642#265318#0" expanded="false" />
+            <marker date="1507529270012" expanded="true" signature="208607:208616" placeholder="..." />
           </folding>
         </state>
       </provider>

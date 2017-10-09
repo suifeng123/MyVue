@@ -5,9 +5,17 @@
  */
 (
 function (global, factory) {
+   //这里global在浏览器环境中是指向window,factory指向的是哪个函数，最终实现的效果是
+    console.log('显示一些想要的东西');
+    console.log("exports的类型是:"+typeof exports+"module的类型是"+typeof module);
+    console.log("define的类型"+typeof define);
+    console.log("global是什么"+global);
+    console.log('展示一些factory是什么');
+    console.log(factory);
+
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
-	(global.Vue = factory());
+	(global.Vue = factory());//这个函数是执行了最后一行的程序
 }(this, (
 function (){ 
   'use strict';
@@ -17,6 +25,7 @@ function (){
 // these helpers produces better vm code in JS engines due to their
 // explicitness and function inlining
 function isUndef (v) {
+
   return v === undefined || v === null
 }
 
