@@ -640,7 +640,8 @@ var _isServer;
 var isServerRendering = function () {
   if (_isServer === undefined) {
     /* istanbul ignore if */
-    if (!inBrowser && typeof global !== 'undefined') {
+    if (!inBrowser && typeof global !== 'undefined') { 
+
       // detect presence of vue-server-renderer and avoid
       // Webpack shimming the process
       _isServer = global['process'].env.VUE_ENV === 'server';
@@ -790,11 +791,11 @@ var Dep = function Dep () {
 
 Dep.prototype.addSub = function addSub (sub) {
   this.subs.push(sub);
-};
+}; //添加一个订阅
 
 Dep.prototype.removeSub = function removeSub (sub) {
   remove(this.subs, sub);
-};
+};  //删除一个订阅
 
 Dep.prototype.depend = function depend () {
   if (Dep.target) {
@@ -814,7 +815,7 @@ Dep.prototype.notify = function notify () {
 // this is globally unique because there could be only one
 // watcher being evaluated at any time.
 Dep.target = null;
-var targetStack = [];
+var targetStack = []; //目标栈
 
 function pushTarget (_target) {
   if (Dep.target) { targetStack.push(Dep.target); }
