@@ -134,6 +134,8 @@ function makeMap (
  */
 var isBuiltInTag = makeMap('slot,component', true);
 
+console.log(isBuiltInTag);
+
 /**
  * Check if a attribute is a reserved attribute.
  */
@@ -352,6 +354,9 @@ var LIFECYCLE_HOOKS = [
   'activated',
   'deactivated'
 ];
+
+//add by 王圣文
+var temp_name = "王圣文";
 
 /*  */
 
@@ -7858,6 +7863,11 @@ Vue$3.config.isReservedTag = isReservedTag;
 Vue$3.config.isReservedAttr = isReservedAttr;
 Vue$3.config.getTagNamespace = getTagNamespace;
 Vue$3.config.isUnknownElement = isUnknownElement;
+
+/**
+ * add by 王圣文
+ */
+Vue$3.temp_name = "wangshengwen";
 
 // install platform runtime directives & components
 extend(Vue$3.options.directives, platformDirectives);
