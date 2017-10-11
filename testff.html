@@ -8,13 +8,19 @@
 </head>
 <body>
 <div id="app">
-{{message}}
+<p>{{message}}</p>
+<button v-on:click="reverseMessage">逆转信息</button>
 </div>
 <script>
 var app = new Vue({
     el:'#app',
     data:{
-        message:'Hello Vue'
+      message: 'Hello Vue.js'
+    },
+    methods: {
+        reverseMessage: function(){
+            this.message = this.message.split('').reverse().join('');
+        }
     }
 })
 </script>
