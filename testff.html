@@ -7,28 +7,22 @@
     
 </head>
 <body>
-<div id="app-7">
-  <ol>
-    <todo-item>
-    </todo-item>
-  </ol>
-</div>
-<script type="text/javascript">
-   Vue.component('todo-item',{
-    props:['todo'],
-    template:'<li>这里是待办事项</li>'
-   })
 
-   var app7 = new Vue({
-    el:'#app-7',
-    data: {
-        groceryList: [
-            {id:0,text:"蔬菜"},
-            {id:1,text:'奶酪'},
-            {id:2,text:'随便其他人吃的东西'}
-        ]
-    }
-   })
+<script type="text/javascript">
+  //我们的数据对象
+  var data = { a: 1};
+  //该对象被加入到一个Vue实例
+  var vm = new Vue({
+    data: data
+  })
+  //他们引用的相同的对象
+  console.log(vm.a === data.a);
+
+  //设置属性也会影响到原始数据
+  vm.a = 2;
+  console.log(data.a);
+  
+
 </script>
 
 
