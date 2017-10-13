@@ -7,22 +7,37 @@
     
 </head>
 <body>
-
+<div id="example">
+  <div v-bind:id="dynamicId"></div>
+  <button v-bind:disabled="isButtonDisabled">这是一个按钮</button>
+</div>
 <script type="text/javascript">
   //我们的数据对象
   var data = { a: 1};
   //该对象被加入到一个Vue实例
   var vm = new Vue({
-    data: data
+    el:'#example',
+    data: {
+        a: 1,
+        message:'这里之渲染一次',
+        dynamicId:1000,
+        isButtonDisabled: false
+
+    },
+    created: () => {
+        //this 指向 vm实例
+        console.log('a is:' + this.a);
+    }
   })
-  //他们引用的相同的对象
-  console.log(vm.a === data.a);
+ 
+ console.log(vm.$data === data);
 
-  //设置属性也会影响到原始数据
-  vm.a = 2;
-  console.log(data.a);
-  
+ console.log(vm.$el  === document.getElementById('example'));
 
+ //$watch 是一个实例方法
+ vm.$watch('a',function(newVal,oldVal){
+    //这个回调函数
+ })
 </script>
 
 
