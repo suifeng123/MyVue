@@ -8,36 +8,26 @@
 </head>
 <body>
 <div id="example">
-  <div v-bind:id="dynamicId"></div>
-  <button v-bind:disabled="isButtonDisabled">这是一个按钮</button>
+  <div v-bind:class="[activeClass,errorClass]"></div>
 </div>
 <script type="text/javascript">
-  //我们的数据对象
-  var data = { a: 1};
-  //该对象被加入到一个Vue实例
-  var vm = new Vue({
+   var app = new Vue({
     el:'#example',
-    data: {
-        a: 1,
-        message:'这里之渲染一次',
-        dynamicId:1000,
-        isButtonDisabled: false
-
+    data:{
+      activeClass:'active',
+      errorClass: 'text-danger',
+      
     },
-    created: () => {
-        //this 指向 vm实例
-        console.log('a is:' + this.a);
+    computed: {
+        classObject: function(){
+          return {
+            active: this.isActive && !this.error,
+            'text-danger': this.error && this.error.type === 'fatal'
+          }
+        }
     }
-  })
- 
- console.log(vm.$data === data);
 
- console.log(vm.$el  === document.getElementById('example'));
-
- //$watch 是一个实例方法
- vm.$watch('a',function(newVal,oldVal){
-    //这个回调函数
- })
+   })  
 </script>
 
 
