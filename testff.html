@@ -8,24 +8,30 @@
 </head>
 <body>
 <div id="example">
-  <div v-bind:class="[activeClass,errorClass]"></div>
+  
+  <li v-for="(value,key,index) in message">
+    {{index}}---{{key}}--{{value}}
+  </li>
 </div>
 <script type="text/javascript">
+   //内联样式的书写,或者直接绑定一个对象
+   //对一个对象的遍历
    var app = new Vue({
-    el:'#example',
-    data:{
-      activeClass:'active',
-      errorClass: 'text-danger',
-      
-    },
-    computed: {
-        classObject: function(){
-          return {
-            active: this.isActive && !this.error,
-            'text-danger': this.error && this.error.type === 'fatal'
-          }
+       el:"#example",
+       data:{
+        items:[
+        {message:'wangshengwe'},
+        {message:"asdafds"}
+        ],
+        object:{
+          name:'wangshengwe',
+          age: 29,
+          ee:'asdf'
+        },
+        message:{
+          aa:'saf'
         }
-    }
+       }
 
    })  
 </script>
