@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+     body {
+      /*margin: 0; */
+     }
+    </style>
+    <script type="text/javascript" src="vue.js"></script>
+
+    
+</head>
+<body>
+<div id="example">
+  
+  <button v-on:click="counter += 1">增加1</button>
+  <p>这个按钮被点击可{{counter}}次</p>
+  <button v-on:click="greet">Greet</button>
+  <button v-on:click="say('hi')">内联按钮</button>
+  <button v-on:click="warn('From cannot be sumited',$event)">$subumit</button>
+</div>
+<script type="text/javascript">
+   //内联样式的书写,或者直接绑定一个对象
+   //对一个对象的遍历
+   var app = new Vue({
+       el:"#example",
+       data:{
+        counter: 0,
+        name:'sdfsd'
+       },
+       methods:{
+        greet: function(event){
+          //this 在方法中指向Vue实例
+          alert('Hello'+this.name);
+          //event指向原生事件
+          console.log(event.target.tagName);
+          if(event){
+            alert(event.target.tagName);
+          }
+        },
+        warn: function(message,event){
+          //访问原生的事件
+         // if(event) event.preventDefault();
+          alert(message);
+        }
+       }
+       
+
+   })  
+</script>
+
+
+</body>
+</html>
