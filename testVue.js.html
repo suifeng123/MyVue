@@ -14,37 +14,63 @@
 </head>
 <body>
 <div id="example">
-  
-  <input v-model="parentMsg" />
-  <child :message="parentMsg"></child>
-  <todo-item :totomessage="todo"></todo-item>
+  <p>{{total}}</p>
+ <currency-input v-model="price"></currency-input>
 </div>
 
 </div>
 <script type="text/javascript">
-   //内联样式的书写,或者直接绑定一个对象
-   //对一个对象的遍历
-   //注册组件
-   Vue.component('child',{
-    //提供props
-    props:['message'],
-    template:'<div>{{message}}</div>'
-   })
-   //写一个组件
-   Vue.component('todo-item',{
-    props:['totomessage'],
-    template:'<div>{{totomessage}}</div>'
-   })
-   var app = new Vue({
-       el:"#example",
-       data:{
-        parentMsg:'',
-        todo:{
-          text:'Learn Vue',
-          isComplete:false
+    Vue.component('currency-input', {
+  template: '\
+    <span>\
+      $\
+      <input\
+        ref="input"\
+        v-bind:value="value"\
+        v-on:input="updateValue($event.target.value)"\
+      >\
+    </span>\
+  ',
+  props: ['value'],
+  methods: {
+    // 不是直接更新值，而是使用此方法来对输入值进行格式化和位数限制
+    updateValue: function (value) {
+      var formattedValue = value
+        // 删除两侧的空格符
+        .trim()
+        // 保留 2 位小数
+        .slice(
+          0,
+          value.indexOf('.') === -1
+            ? value.length
+            : value.indexOf('.') + 3
+        )
+      // 如果值尚不合规，则手动覆盖为合规的值
+      if (formattedValue !== value) {
+        this.$refs.input.value = formattedValue
+      }
+      // 通过 input 事件带出数值
+      this.$emit('input', Number(formattedValue))
+    }
+  }
+})
+      /**
+       * [el description]
+       * @type {String}
+       * 事件包括三件事：首先是在组件中的事件，组件想父组件传递的事件使用$emit
+       * 方法进行传递，v-on:子组件emit的事件，第三个事件时父组件的事件：v-on:emitThing="父组件的事件"
+       */
+      new Vue({
+      el:'#example',
+      data:{
+        total: 0,
+      },
+      methods:{
+        incrementTotal:function(){ //这里是在父组件中绑定的事件
+          this.total += 1;
         }
-       }
-   })  
+      }
+    })
 </script>
 
 
