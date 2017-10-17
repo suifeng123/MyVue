@@ -15,13 +15,11 @@
 <body>
 <div id="example">
   
-   <input type="radio" id="one" value="One" v-model="picked">
-  <label for="one">One</label>
-  <br>
-  <input type="radio" id="two" value="Two" v-model="picked">
-  <label for="two">Two</label>
-  <br>
-  <span>Picked: {{ picked }}</span>
+  <select v-model="selected">
+    <!-- 内联对象字面量 -->
+  <option v-bind:value="{ number: 123 }">123</option>
+</select>
+<input v-model.number="age" type="number" />
 </div>
 
 </div>
@@ -31,7 +29,15 @@
    var app = new Vue({
        el:"#example",
        data:{
-        picked:''
+        picked:'',
+        selected:'',
+        options:[
+         {text:'One',value:'A'},
+         {text:'Two',value:'B'},
+         {text:'Three',value:'C'}
+        ],
+        a:'sdfasdf',
+        age:10
        },
        
 
