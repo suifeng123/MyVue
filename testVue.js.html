@@ -14,63 +14,21 @@
 </head>
 <body>
 <div id="example">
-  <p>{{total}}</p>
- <currency-input v-model="price"></currency-input>
-</div>
-
+<child-component></child-component>  
 </div>
 <script type="text/javascript">
-    Vue.component('currency-input', {
-  template: '\
-    <span>\
-      $\
-      <input\
-        ref="input"\
-        v-bind:value="value"\
-        v-on:input="updateValue($event.target.value)"\
-      >\
-    </span>\
-  ',
-  props: ['value'],
-  methods: {
-    // 不是直接更新值，而是使用此方法来对输入值进行格式化和位数限制
-    updateValue: function (value) {
-      var formattedValue = value
-        // 删除两侧的空格符
-        .trim()
-        // 保留 2 位小数
-        .slice(
-          0,
-          value.indexOf('.') === -1
-            ? value.length
-            : value.indexOf('.') + 3
-        )
-      // 如果值尚不合规，则手动覆盖为合规的值
-      if (formattedValue !== value) {
-        this.$refs.input.value = formattedValue
-      }
-      // 通过 input 事件带出数值
-      this.$emit('input', Number(formattedValue))
-    }
-  }
-})
-      /**
-       * [el description]
-       * @type {String}
-       * 事件包括三件事：首先是在组件中的事件，组件想父组件传递的事件使用$emit
-       * 方法进行传递，v-on:子组件emit的事件，第三个事件时父组件的事件：v-on:emitThing="父组件的事件"
-       */
-      new Vue({
-      el:'#example',
-      data:{
-        total: 0,
-      },
-      methods:{
-        incrementTotal:function(){ //这里是在父组件中绑定的事件
-          this.total += 1;
-        }
-      }
-    })
+  Vue.component('child-component',{
+    //有效，因为是在正确的作用域内
+    template:`<div>
+    <h2>我是子组件的标题</h2>
+    <slot>
+     只有在没有要分发的内容才显示
+    </slot>
+    </div>`,
+  });
+  new Vue({
+    el:'#example',
+  })
 </script>
 
 
