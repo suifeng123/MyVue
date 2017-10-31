@@ -4,31 +4,42 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style type="text/css">
-     body {
-      /*margin: 0; */
-     }
+     .component-fade-enter-active, .component-fade-leave-active {
+  transition: opacity .3s ease;
+}
+.component-fade-enter, .component-fade-leave-to
+/* .component-fade-leave-active for below version 2.1.8 */ {
+  opacity: 0;
+}
     </style>
     <script type="text/javascript" src="vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
+
 
     
 </head>
 <body>
 <div id="example">
-<child-component></child-component>  
+ <transition name="component-fade" mode="out-in">
+ <component v-bind:is="view"></component>
+ </transition>
 </div>
 <script type="text/javascript">
-  Vue.component('child-component',{
-    //有效，因为是在正确的作用域内
-    template:`<div>
-    <h2>我是子组件的标题</h2>
-    <slot>
-     只有在没有要分发的内容才显示
-    </slot>
-    </div>`,
-  });
-  new Vue({
-    el:'#example',
-  })
+new Vue({
+  el:'#example',
+  data:{
+    view:'v-a'
+  },
+  components:{
+    'v-a': {
+      template:'<div>Component A</div>'
+    },
+    'v-b':{
+      template:'<div>Component B</div>'
+    }
+  }
+})
+
 </script>
 
 
