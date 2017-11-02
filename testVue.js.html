@@ -3,43 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style type="text/css">
-     .component-fade-enter-active, .component-fade-leave-active {
-  transition: opacity .3s ease;
-}
-.component-fade-enter, .component-fade-leave-to
-/* .component-fade-leave-active for below version 2.1.8 */ {
-  opacity: 0;
-}
-    </style>
     <script type="text/javascript" src="vue.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
-
-
-    
 </head>
 <body>
-<div id="example">
- <transition name="component-fade" mode="out-in">
- <component v-bind:is="view"></component>
- </transition>
+<div id="hook" v-demo:foo.a.b="message">
 </div>
 <script type="text/javascript">
-new Vue({
-  el:'#example',
-  data:{
-    view:'v-a'
-  },
-  components:{
-    'v-a': {
-      template:'<div>Component A</div>'
-    },
-    'v-b':{
-      template:'<div>Component B</div>'
-    }
+//注册一个全局的自定义的指令 v-foucs
+Vue.directive('focus',{
+  //当绑定元素插到DOM中
+  insert: function(el){
+    //聚焦元素
+    console.log(el);
+    el.focus();
   }
 })
 
+new Vue({
+  el:'#example',
+})
 </script>
 
 
