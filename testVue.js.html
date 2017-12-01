@@ -4,18 +4,29 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script type="text/javascript" src="vue.js"></script>
+    <!--使用vuex 进行状态管理 -->
+    <script type="text/javascript" src="vuex.js"></script>
 </head>
 <body>
-<div id="mount-point"></div>
+<div id="app">
+  <button @click="increment">增1</button>
+  <span>{{count}}</span>
+</div>
 </div>
 <script type="text/javascript">
-var data = {a: 1}; //定义一个变量
-
-//直接创建一个实例
-var vm = new Vue({
-  data: data
-});
-
+new Vue({
+  el:'#app',
+  data() {
+    return {
+      count: 0,
+    }
+  },
+  methods: {
+    increment() {
+      this.count++;
+    }
+  }
+})
 
 </script>
 
